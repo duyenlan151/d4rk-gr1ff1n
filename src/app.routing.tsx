@@ -12,6 +12,7 @@ import authGuard from "./shared/guards/auth.guard";
 
 // Lazy loaded components
 const Login = lazy(() => import("./modules/auth/login/login.component"));
+const SignUp = lazy(() => import("./modules/auth/sign-up/sign-up.component.tsx"));
 const Commission = lazy(() => import("./modules/commission/commission.component"));
 
 // Application's routes
@@ -35,6 +36,11 @@ export const routes: RouteObject[] = [
   {
     path: "login",
     element: <Login />,
+    loader: noAuthGuard,
+  },
+  {
+    path: "sign-up",
+    element: <SignUp />,
     loader: noAuthGuard,
   },
 ];

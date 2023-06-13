@@ -1,9 +1,24 @@
+@import "../../../shared/styles/_variables";
+
 #image-container::before {
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  background: #75757554;
-  content: '';
+  background: #1d1d1dbd;
+  content: "";
+  z-index: 1;
+}
+
+#logo-container {  
+  #logo {
+    font-family: $fredericko-font;
+  }
+}
+
+#description-container {
+  #description {
+    width: 75ch;
+  }
 }

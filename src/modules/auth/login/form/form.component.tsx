@@ -20,8 +20,8 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
   };
 
   return (
-    <form className="gap-6 flex flex-col" onSubmit={onSubmit} autoComplete="off">
-    { errorMessage && <span className="text-red-500">{ errorMessage }</span> }
+    <form className="gap-6 flex flex-col relative" onSubmit={onSubmit} autoComplete="off">
+    { errorMessage && <span className="text-red-500 absolute -top-10">{ errorMessage }</span> }
       <FormGroup className="gap-6 flex flex-col">
         <FormControl>
           <InputLabel htmlFor="username">Username</InputLabel>
@@ -51,7 +51,7 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
       </div>
       <div className="flex justify-around">
         <Button sx={buttonOverriddenStyles} type="submit" variant="contained">Login</Button>
-        <Button sx={buttonOverriddenStyles} variant="outlined">Sign Up</Button>
+        <Button sx={buttonOverriddenStyles} href="/sign-up" variant="outlined">Sign Up</Button>
       </div>
     </form>
   );

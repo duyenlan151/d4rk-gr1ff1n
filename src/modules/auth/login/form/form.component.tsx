@@ -20,7 +20,7 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
   };
 
   return (
-    <form className="gap-6 flex flex-col" onSubmit={onSubmit}>
+    <form className="gap-6 flex flex-col" onSubmit={onSubmit} autoComplete="off">
     { errorMessage && <span className="text-red-500">{ errorMessage }</span> }
       <FormGroup className="gap-6 flex flex-col">
         <FormControl>
@@ -60,11 +60,7 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
 function PasswordAdornment({ showPassword, click, mousedown, }: IPasswordAdornment) {
   return (
     <InputAdornment position="end">
-      <IconButton
-        aria-label="toggle password visibility"
-        onClick={click}
-        onMouseDown={mousedown}
-      >
+      <IconButton aria-label="toggle password visibility" onClick={click} onMouseDown={mousedown}>
         {showPassword ? <VisibilityOff /> : <Visibility />}
       </IconButton>
     </InputAdornment>

@@ -1,5 +1,4 @@
-import "./shared/styles/_global.css";
-import "./app.component.css";
+import "./shared/styles/_global.scss";
 
 import ReactDOM from "react-dom/client";
 

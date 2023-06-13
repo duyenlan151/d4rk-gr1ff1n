@@ -1,9 +1,12 @@
+import "./login.component.scss";
+
 import { FormEvent, useEffect, useState } from "react";
 import { Observable, catchError, of } from "rxjs";
 import { useNavigate } from "react-router-dom";
 
 import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provider";
 import Constants from "../../../shared/constants.enum.ts";
+import background from "../../../assets/images/login-background.jpg";
 import Loader from "../../../shared/components/loader/loader.component";
 import Form from "./form/form.component";
 
@@ -76,15 +79,24 @@ function Login() {
   }
 
   return (
-    <div className="w-screen h-screen flex p-36 justify-between">
-      <p>login works</p>
-      <div className="flex flex-col gap-20 p-16 border border-black rounded-lg w-4/12 relative">
-        {isProcessing && <Loader />}
-        <div>
-          <h1 className="text-3xl font-semibold">Login</h1>
-          <p>Welcome back</p>
+    <div className="w-screen h-screen p-36 relative">
+      <div id="background" className="absolute w-full h-full top-0 left-0 z-0 pointer-events-none">
+        <div id="image-container" className="w-full h-full relative">
+          <img src={background} alt="background-image" className="w-full h-full"/>
         </div>
-        <Form onSubmit={onFormSubmit} errorMessage={errorMessage} />
+      </div>
+      <div id="content" className="w-full h-full flex justify-between z-10">
+        <div className="z-10">
+          <p>login works</p>
+        </div>
+        <div className="flex flex-col gap-20 p-16 shadow-lg shadow-gray-500/60 rounded-lg w-4/12 relative bg-white">
+          {isProcessing && <Loader />}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl font-semibold">Login</h1>
+            <p>Welcome back, please enter your credentials below to access your account and continue your creative journey.</p>
+          </div>
+          <Form onSubmit={onFormSubmit} errorMessage={errorMessage} />
+        </div>
       </div>
     </div>
   );

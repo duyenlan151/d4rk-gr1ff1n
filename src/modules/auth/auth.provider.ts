@@ -1,32 +1,40 @@
+import { Observable, map } from "rxjs";
 import { environment } from "../../shared/environments/environment";
-import { map } from "rxjs";
+import { Record } from "immutable";
 
 import useHttpProvider from "../../shared/providers/http.provider";
 
-interface ILoginDto {
-  username?: string;
-  password?: string;
+export interface ILoginDto {
+  username: string;
+  password: string;
 }
 
-class LoginDto implements ILoginDto {
-  username?: string | undefined;
-  password?: string | undefined;
-
-  constructor(params: ILoginDto) {
-    this.username = params.username;
-    this.password = params.password;
-  }
+export interface ILogInResDto {
+  accessToken: string;
 }
 
-function useAuthProvider() {
+export class LoginDto extends Record<ILoginDto>({
+  username: "",
+  password: "",
+}) {}
+
+export class LoginResDto extends Record<ILogInResDto>({
+  accessToken: "",
+}) {}
+
+export interface IAuthProvider {
+  login(loginDto: LoginDto): Observable<LoginResDto>;
+}
+
+function useAuthProvider(): IAuthProvider {
   const { post } = useHttpProvider();
   const _endpoint = `${environment.remoteServiceURL}/auth`;
 
-  function login(loginDto: LoginDto) {
+  function login(loginDto: LoginDto): Observable<LoginResDto> {
     const url = `${_endpoint}/sign-in`;
 
-    return post<{ accessToken: string }>(url, loginDto).pipe(
-      map(({ data }) => data)
+    return post<LoginResDto>(url, loginDto).pipe(
+      map(({ data }): LoginResDto => new LoginResDto(data))
     );
   }
 

@@ -1,17 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
+import { routes as commissionRoutes } from "./modules/commission/commission.routing";
 import { RouteObject } from "react-router-dom";
 import { lazy } from "react";
-import { routes as commissionRoutes } from "./modules/commission/commission.routing";
 
-import App from "./app.component";
 import Landing from "./modules/home/landing.component";
+import App from "./app.component";
 
 // Guards
-import authGuard from "./shared/guards/auth.guard";
 import noAuthGuard from "./shared/guards/no-auth.guard";
+import authGuard from "./shared/guards/auth.guard";
 
 // Lazy loaded components
 const Login = lazy(() => import("./modules/auth/login/login.component"));
+const Commission = lazy(() => import("./modules/commission/commission.component"));
 
 // Application's routes
 export const routes: RouteObject[] = [
@@ -25,6 +26,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: "commission",
+        element: <Commission />,
         children: commissionRoutes,
         loader: authGuard,
       },
@@ -33,6 +35,6 @@ export const routes: RouteObject[] = [
   {
     path: "login",
     element: <Login />,
-    loader: noAuthGuard
+    loader: noAuthGuard,
   },
 ];

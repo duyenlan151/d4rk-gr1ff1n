@@ -4,9 +4,10 @@ import { FormEventHandler, useState } from "react";
 
 interface IFormProps {
   onSubmit: FormEventHandler<HTMLFormElement>
+  errorMessage?: string
 }
 
-function Form({ onSubmit }: IFormProps) {
+function Form({ onSubmit, errorMessage }: IFormProps) {
   const buttonOverriddenStyles: SxProps<Theme> = { padding: '0', height: '50px', width: '200px', borderRadius: '5px' };
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
@@ -20,6 +21,7 @@ function Form({ onSubmit }: IFormProps) {
 
   return (
     <form className="gap-6 flex flex-col" onSubmit={onSubmit}>
+    { errorMessage && <span className="text-red-500">{ errorMessage }</span> }
       <FormGroup className="gap-6 flex flex-col">
         <TextField id="outlined-basic" label="Username" variant="outlined" name="username"/>
         <FormControl variant="outlined">
@@ -34,7 +36,7 @@ function Form({ onSubmit }: IFormProps) {
         </FormControl>
       </FormGroup>
       <div className="flex flex-row justify-between">
-        <FormControlLabel control={<Checkbox name="isRemember"/>} label="Remember Me" />
+        <FormControlLabel control={<Checkbox name="isRemember" />} label="Remember Me" />
         <Link href="/login" className="pt-2">Forgot password?</Link>
       </div>
       <div className="flex justify-around">

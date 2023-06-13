@@ -5,6 +5,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  color: $text-color;
+* {
+  box-sizing: border-box;
+
+  html {
+    color: $text-color;
+  }
 }

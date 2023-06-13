@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, SxProps, TextField, Theme } from "@mui/material";
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, IconButton, InputAdornment, InputLabel, Link, OutlinedInput, SxProps, Theme } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FormEventHandler, useState } from "react";
 
@@ -23,15 +23,25 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
     <form className="gap-6 flex flex-col" onSubmit={onSubmit}>
     { errorMessage && <span className="text-red-500">{ errorMessage }</span> }
       <FormGroup className="gap-6 flex flex-col">
-        <TextField id="outlined-basic" label="Username" variant="outlined" name="username"/>
+        <FormControl>
+          <InputLabel htmlFor="username">Username</InputLabel>
+          <OutlinedInput id="username" name="username" label="Username" required/>
+        </FormControl>
         <FormControl variant="outlined">
           <InputLabel htmlFor="password">Password</InputLabel>
-          <OutlinedInput
-            id="password"
-            name="password"
-            label="Password"
+          <OutlinedInput 
+            id="password" 
+            name="password" 
+            label="Password" 
+            required 
             type={isPasswordShown ? "text" : "password"}
-            endAdornment={<PasswordAdornment showPassword={isPasswordShown} click={onPasswordShowBtnClick} mousedown={onPasswordMouseDown}/>}
+            endAdornment={
+              <PasswordAdornment 
+                showPassword={isPasswordShown} 
+                click={onPasswordShowBtnClick} 
+                mousedown={onPasswordMouseDown}
+              />
+            }
           />
         </FormControl>
       </FormGroup>

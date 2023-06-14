@@ -168,7 +168,7 @@ function Form({ onSubmit }: IForm) {
             return;
           }
 
-          mutativeErrorList.push(`${titleCasePropName} already existed!`);
+          mutativeErrorList.push(`${titleCasePropName} already taken!`);
         })
       );
     }

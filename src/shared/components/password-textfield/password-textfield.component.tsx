@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, OutlinedInput } from "@mui/material";
-import { FormEventHandler, useState } from "react";
+import { InputLabel, OutlinedInput } from "@mui/material";
+import { useState } from "react";
 
 import PasswordAdornment from "../password-adornment/password-adornment.component";
 
@@ -7,10 +7,9 @@ interface IPasswordTextField {
   id: string;
   name: string;
   label: string;
-  onInput: FormEventHandler<HTMLInputElement>;
 }
 
-function PasswordTextField({ id, name, label, onInput }: IPasswordTextField) {
+function PasswordTextField({ id, name, label }: IPasswordTextField) {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
 
   const onPasswordShowBtnClick = () => {
@@ -22,7 +21,7 @@ function PasswordTextField({ id, name, label, onInput }: IPasswordTextField) {
   };
 
   return (
-    <FormControl variant="outlined" onInput={onInput}>
+    <>
       <InputLabel htmlFor={id}>{label}</InputLabel>
       <OutlinedInput 
         id={id}
@@ -32,7 +31,7 @@ function PasswordTextField({ id, name, label, onInput }: IPasswordTextField) {
         type={isPasswordShown ? "text" : "password"}
         endAdornment={ <PasswordAdornment showPassword={isPasswordShown} click={onPasswordShowBtnClick} mousedown={onPasswordMouseDown}/> }
       />
-    </FormControl>
+    </>
   );
 }
 

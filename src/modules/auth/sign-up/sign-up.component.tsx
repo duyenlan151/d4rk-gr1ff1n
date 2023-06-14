@@ -1,6 +1,8 @@
 import "./sign-up.component.scss";
 
-import { SignUpDto } from "../auth.provider";
+import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
+import { Observable, catchError, of } from "rxjs";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -10,15 +12,37 @@ import backgroundSmall from "../../../assets/images/sign-up-background-small.jpg
 import Background from "../../../shared/components/background/background.component";
 import Loader from "../../../shared/components/loader/loader.component";
 import Logo from "../../../shared/components/logo/logo.component";
+import Constants from "../../../shared/constants.enum";
 
 
 function SignUp() {
+  const navigate = useNavigate();
+  const { signUp } = useAuthProvider();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
 
   function onFormSubmit(value: SignUpDto): void {
-    console.log(value.toJS())
+    setIsProcessing(true);
+
+    signUp(value).pipe(catchError(_errorSelector)).subscribe(_onSubmitRespond);
+  }
+
+  function _onSubmitRespond ({ accessToken }: LoginResDto): void  {
+    if (!accessToken) {
+      return;
+    }
+
+    localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
+    navigate("/");
+  }
+
+  function _errorSelector(err: unknown): Observable<LoginResDto> {
+    setErrorMessage((err as Error).message);
+    setIsProcessing(false);
+
+    return of(new LoginResDto());
   }
 
   return (

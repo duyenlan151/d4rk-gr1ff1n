@@ -160,15 +160,15 @@ function Form({ onSubmit }: IForm) {
           }
 
           const [firstChar, ...others] = propName;
+          const titleCasePropName = firstChar.toUpperCase() + others.join("")
 
           if (isValid === undefined) {
-          mutativeErrorList.push(`${firstChar.toUpperCase()}${others.join("")} is required!`);
-
+            mutativeErrorList.push(`${titleCasePropName} is required!`);
 
             return;
           }
 
-          mutativeErrorList.push(`${firstChar.toUpperCase()}${others.join("")} already existed!`);
+          mutativeErrorList.push(`${titleCasePropName} already existed!`);
         })
       );
     }

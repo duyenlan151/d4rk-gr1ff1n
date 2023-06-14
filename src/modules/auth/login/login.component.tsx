@@ -8,6 +8,7 @@ import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provi
 import backgroundSmall from "../../../assets/images/login-background-small.jpg";
 import Constants from "../../../shared/constants.enum.ts";
 import background from "../../../assets/images/login-background.jpg";
+import Background from "../../../shared/components/background/background.component.tsx";
 import Loader from "../../../shared/components/loader/loader.component";
 import Form from "./form/form.component";
 import Logo from "../../../shared/components/logo/logo.component.tsx";
@@ -17,7 +18,6 @@ function Login() {
   const { login } = useAuthProvider();
 
   // UI related
-  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Form related
@@ -31,10 +31,6 @@ function Login() {
       _requestLogin(new LoginDto(JSON.parse(cred)));
     }
   });
-
-  function onBackgroundLoaded(): void {
-    setBackgroundLoaded(true)
-  }
 
   function onFormSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
@@ -90,11 +86,7 @@ function Login() {
 
   return (
     <div className="w-screen h-screen p-36 relative">
-      <div id="background" className="absolute w-full h-full top-0 left-0 z-0 pointer-events-none">
-        <div id="image-container" className="w-full h-full relative bg-no-repeat bg-center bg-cover" style={{ backgroundImage: `url(${backgroundSmall})` }}>
-          <img src={background} alt="background-image" className="w-full h-full transition-opacity duration-300 ease-in" style={{ opacity: backgroundLoaded ? 1 : 0 }} onLoad={onBackgroundLoaded}/>
-        </div>
-      </div>
+      <Background background={background} backgroundSmall={backgroundSmall}/>
       <div id="content" className="w-full h-full flex justify-between z-10">
         <div className="branding flex flex-col gap-11 relative">
           <div id="logo-container" className="z-10 text-white relative">
@@ -111,7 +103,7 @@ function Login() {
             <p>© 2022-2023 Jack Miller. All rights reserved.</p>
           </div>
         </div>
-        <div className="flex flex-col gap-20 p-16 shadow-lg shadow-gray-500/60 rounded-lg w-4/12 relative bg-white">
+        <div className="flex flex-col gap-20 p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
           {isProcessing && <Loader />}
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-semibold">Login</h1>

@@ -1,9 +1,61 @@
+import "./sign-up.component.scss";
+
+import { SignUpDto } from "../auth.provider";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import Form from "./form/form.component";
+import background from "../../../assets/images/sign-up-background.jpg";
+import backgroundSmall from "../../../assets/images/sign-up-background-small.jpg";
+import Background from "../../../shared/components/background/background.component";
+import Loader from "../../../shared/components/loader/loader.component";
+import Logo from "../../../shared/components/logo/logo.component";
+
 
 function SignUp() {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+
+
+  function onFormSubmit(value: SignUpDto): void {
+    console.log(value.toJS())
+  }
+
   return (
-    <div id="content">
-      <Form />
+    <div className="w-screen h-screen p-36 relative">
+      <Background background={background} backgroundSmall={backgroundSmall}/>
+      <div id="content" className="w-full h-full flex justify-between z-10">
+        <div className="flex flex-col justify-between p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
+          {isProcessing && <Loader />}
+          <div className="flex flex-col gap-2">
+            <h1 className="text-4xl font-semibold">Hi, Friend!</h1>
+            <p>Unlock Your Creative Journey with Us!</p>
+          </div>
+          <Form onSubmit={onFormSubmit} errorMessage={errorMessage} />
+          <div className="w-full flex justify-center">
+            <p>Already got an account? <Link to="/login">Login</Link></p>
+          </div>
+        </div>
+        <div className="branding flex flex-col gap-11 relative">
+          <div id="logo-container" className="z-10 text-white relative">
+            <Logo className="w-32 h-32" fill="#fff"/>
+            <div id="brand">
+              <p id="logo" className="text-7xl font-medium uppercase subpixel-antialiased">D4rk Griffin</p>
+              <p id="tagline" className="text-2xl font-medium subpixel-antialiased">Art Made Just for You – Commission Your Perfect Piece!</p>
+            </div>
+          </div>
+          <div id="description-container" className="z-10 text-white relative text-lg flex flex-col gap-2">
+            <p className="description">Welcome to D4RK GRIFFIN, where your artistic dreams find their ultimate expression. As the sole artist behind this site, I am dedicated to turning your imagination into awe-inspiring works of art.</p>
+            <p className="description">From mesmerizing portraits to captivating scenes, my artistry is driven by a desire to evoke emotions and ignite your imagination. Every brushstroke infused with the essence of your dreams.</p>
+            <p className="description">Through open communication and a transparent process, I invite you to actively participate in the creation of your artwork. Experience the thrill of witnessing your dreams manifest on canvas or screen.</p>
+            <p className="description">Elevate your space, evoke emotions, and embrace the power of art tailor-made for you. At D4RK GRIFFIN, I am here to make your artistic dreams a reality.</p>
+            <p className="description text-right italic">Unleash your imagination and witness your dreams transformed.</p>
+          </div>
+          <div id="copyright-container" className="z-10 text-white absolute bottom-0 right-0">
+            <p>© 2022-2023 Jack Miller. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

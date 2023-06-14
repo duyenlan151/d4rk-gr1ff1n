@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, FormControl, FormGroup, FormHelperText, InputLabel, OutlinedInput, SxProps, Theme } from "@mui/material";
 import { ClipboardEvent, Dispatch, FormEvent, FormEventHandler, SetStateAction, useEffect, useState } from "react"; 
-import { Observable, Subject, debounceTime, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
+import { Observable, Subject, debounceTime, first, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
 import { List } from "immutable";
 
 import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
@@ -61,7 +61,15 @@ function Form({ onSubmit }: IForm) {
   function onFormValueChanged(obj: Record<string, string>): void {
     const [[key, value]] = Object.entries(obj);
 
-    console.log(obj)
+    if (key === SignUpControl.PASSWORD && formValue.passwordRetype) {
+      const validRetype = formValue.passwordRetype === value
+
+      if (!validRetype) {
+        setPasswordRetypeErrors(List(["Does not match with password!"]));
+      }
+
+      setPasswordRetypeValid(validRetype);
+    }
 
     setFormValue(formValue.set(key as keyof ISignUpFormDto, value));
   }
@@ -132,11 +140,6 @@ function Form({ onSubmit }: IForm) {
   function _handleValueChange(propName: string, stateSetter: Dispatch<SetStateAction<boolean | undefined>>) {
     return ([value, isValid]: [string, boolean | undefined]): void => {
       stateSetter(isValid);
-
-      if (isValid === undefined || !isValid) {
-        return;
-      }
-
       formValueChanged$.next({ [propName]: value });
     };
   }

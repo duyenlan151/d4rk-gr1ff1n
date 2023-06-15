@@ -8,6 +8,8 @@ import composedGuard from "../../shared/guards/composed.guard.ts";
 import authGuard from "../../shared/guards/auth.guard.ts";
 import permissionGuard from "../../shared/guards/permission.guard.ts";
 
+
+// Lazy components
 const Dashboard = lazy(() => import("./dashboard/dashboard.component.tsx"));
 const UserManager = lazy(() => import("./user-manager/user-manager.component.tsx"));
 const RoleManager = lazy(() => import("./role-manager/role-manager.component.tsx"));

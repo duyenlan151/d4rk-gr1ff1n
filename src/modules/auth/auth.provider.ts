@@ -1,6 +1,7 @@
-import { Observable, map } from "rxjs";
-import { environment } from "../../shared/environments/environment";
 import { Record as ImmutableRecord } from "immutable";
+import { Observable, map } from "rxjs";
+import { AppPermission } from "../../shared/constants.enum";
+import { environment } from "../../shared/environments/environment";
 
 import useHttpProvider from "../../shared/providers/http.provider";
 
@@ -49,6 +50,7 @@ export interface IAuthProvider {
   login(loginDto: LoginDto): Observable<LoginResDto>;
   checkUser(user: Record<string, string>): Observable<boolean>;
   signUp(signUpDto: SignUpDto): Observable<LoginResDto>;
+  isGranted(...required: AppPermission[]): Observable<boolean>;
 }
 
 function useAuthProvider(): IAuthProvider {
@@ -77,7 +79,15 @@ function useAuthProvider(): IAuthProvider {
     return get<boolean>(url, { params: user }).pipe(map(({ data }) => !data));
   }
 
-  return { login, signUp, checkUser };
+  function isGranted(...required: AppPermission[]): Observable<boolean> {
+    const url = `${_endpoint}/can-activate`;
+
+    return get<boolean>(url, { params: { required: required.join(",") } }).pipe(
+      map(({ data }) => data)
+    );
+  }
+
+  return { login, signUp, checkUser, isGranted };
 }
 
 export default useAuthProvider;

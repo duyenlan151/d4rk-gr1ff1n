@@ -1,18 +1,19 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./shared/styles/_global.scss";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { User, UserContext, useUserProvider } from "./shared/providers/user.provider";
-import { routes } from "./root.routing";
+import { firstValueFrom } from "rxjs"
+import { Constants } from "./shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
-import { Constants } from "./shared/constants.enum";
-import { firstValueFrom } from "rxjs"
+import { routes } from "./root.routing";
 
 const router = createBrowserRouter(routes);
 
 function Root() {
-  const user = useSignal<User | undefined>(undefined);
   const { getPermissionList } = useUserProvider();
+  const user = useSignal<User | undefined>(undefined);
 
   async function loadUser() {
     const accessToken = localStorage.getItem(Constants.LOCAL_STORAGE_TOKEN);

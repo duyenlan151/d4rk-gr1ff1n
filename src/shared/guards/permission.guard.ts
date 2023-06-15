@@ -7,6 +7,7 @@ import { GuardFn } from "./_guard.model";
 import useAuthProvider from "../../modules/auth/auth.provider";
 
 function permissionGuard(...required: AppPermission[]): GuardFn {
+
   function canActivate(value: boolean) {
     if (!value) {
       throw redirect("/");

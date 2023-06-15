@@ -17,8 +17,6 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('rendered')
-
     if (match) {
       navigate("/home");
     }

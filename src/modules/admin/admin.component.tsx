@@ -9,8 +9,6 @@ function Admin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('rendered')
-
     if (match) {
       navigate("/admin/dashboard");
     }

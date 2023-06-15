@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 
 function Admin() {
   const pattern = "/admin";
@@ -15,10 +15,12 @@ function Admin() {
   }, [location]);
 
   return (
-    <>
-      <p>admin here</p>
-      <Outlet />
-    </>
+    <div id="content-wrapper">
+      <Link to="user-manager" relative="route">user manager</Link>
+      <div id="content">
+        <Outlet />
+      </div>
+    </div>
   );
 }
 

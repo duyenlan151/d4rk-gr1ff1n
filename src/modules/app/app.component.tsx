@@ -5,10 +5,10 @@ import "@fontsource/roboto/700.css";
 import "./app.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import Header from "../../shared/layout/header/header.component";
 import Footer from "../../shared/layout/footer/footer.component";
-import { useEffect } from "react";
 
 function App() {
   const pattern = "/";
@@ -25,7 +25,7 @@ function App() {
   return (
     <div id="content-wrapper">
       <Header />
-      <div>
+      <div id="content">
         <Outlet />
       </div>
       <Footer />

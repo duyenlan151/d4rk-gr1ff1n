@@ -3,10 +3,10 @@ import "./login.component.scss";
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Observable, catchError, of } from "rxjs";
+import { Constants } from "../../../shared/constants.enum.ts";
 
 import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provider";
 import backgroundSmall from "../../../assets/images/login-background-small.jpg";
-import Constants from "../../../shared/constants.enum.ts";
 import background from "../../../assets/images/login-background.jpg";
 import Background from "../../../shared/components/background/background.component.tsx";
 import Loader from "../../../shared/components/loader/loader.component";

@@ -3,6 +3,7 @@ import "./sign-up.component.scss";
 import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
 import { Observable, catchError, of } from "rxjs";
 import { useNavigate } from "react-router-dom";
+import { Constants } from "../../../shared/constants.enum";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,6 @@ import backgroundSmall from "../../../assets/images/sign-up-background-small.jpg
 import Background from "../../../shared/components/background/background.component";
 import Loader from "../../../shared/components/loader/loader.component";
 import Logo from "../../../shared/components/logo/logo.component";
-import Constants from "../../../shared/constants.enum";
 
 
 function SignUp() {

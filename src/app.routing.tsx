@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { routes as commissionRoutes } from "./modules/commission/commission.routing";
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 import { lazy } from "react";
 
 import Landing from "./modules/home/landing.component";
@@ -20,6 +20,7 @@ export const routes: RouteObject[] = [
   {
     path: "/",
     element: <App />,
+    errorElement: <Navigate to="/"/>,
     children: [
       {
         path: "",

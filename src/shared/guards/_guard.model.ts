@@ -1,0 +1,1 @@
+export type GuardFn<T = void> = (params: T) => boolean;

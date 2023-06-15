@@ -6,20 +6,18 @@ import "./app.component.scss";
 
 import { Outlet } from "react-router-dom";
 
-import Header from "./shared/layout/header/header.component";
-import Footer from "./shared/layout/footer/footer.component";
+import Header from "../../shared/layout/header/header.component";
+import Footer from "../../shared/layout/footer/footer.component";
 
 function App() {
   return (
-    <>
+    <div id="content-wrapper">
       <Header />
-
-      <div id="body-container">
+      <div>
         <Outlet />
       </div>
-
       <Footer />
-    </>
+    </div>
   );
 }
 

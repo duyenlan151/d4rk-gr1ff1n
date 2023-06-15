@@ -2,22 +2,18 @@
 import { Navigate, RouteObject } from "react-router-dom";
 import { lazy } from "react";
 
-// Routes
-import { routes as commissionRoutes } from "./modules/commission/commission.routing";
 import { routes as adminRoutes } from "./modules/admin/admin.routing.tsx";
+import { routes as appRoutes } from "./modules/app/app.routing.tsx";
 
-import Landing from "./modules/home/landing.component";
-import App from "./app.component";
 
-// Guards
-import noAuthGuard from "./shared/guards/no-auth.guard";
-import authGuard from "./shared/guards/auth.guard";
 import composedGuard from "./shared/guards/composed.guard.ts";
+import authGuard from "./shared/guards/auth.guard.ts";
+import noAuthGuard from "./shared/guards/no-auth.guard.ts";
+import App from "./modules/app/app.component.tsx";
 
-// Lazy loaded components
+
 const Login = lazy(() => import("./modules/auth/login/login.component"));
 const SignUp = lazy(() => import("./modules/auth/sign-up/sign-up.component.tsx"));
-const Commission = lazy(() => import("./modules/commission/commission.component"));
 const Admin = lazy(() => import("./modules/admin/admin.component.tsx"));
 
 // Application's routes
@@ -26,18 +22,7 @@ export const routes: RouteObject[] = [
     path: "/",
     element: <App />,
     errorElement: <Navigate to="/" />,
-    children: [
-      {
-        path: "",
-        element: <Landing />,
-      },
-      {
-        path: "commission",
-        element: <Commission />,
-        children: commissionRoutes,
-        loader: authGuard,
-      },
-    ],
+    children: appRoutes,
   },
   {
     path: "admin",

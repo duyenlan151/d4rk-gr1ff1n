@@ -2,9 +2,11 @@ import "./login.component.scss";
 
 import { Observable, catchError, firstValueFrom, of } from "rxjs";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider.ts";
-import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { FormEvent, useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum.ts";
+import { useSignal } from "@preact/signals-react";
+
 
 import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provider";
 import backgroundSmall from "../../../assets/images/login-background-small.jpg";
@@ -24,11 +26,11 @@ function Login() {
   const { login } = useAuthProvider();
 
   // UI related
-  const [isProcessing, setIsProcessing] = useState(false);
+  const isProcessing = useSignal(false)
 
   // Form related
-  const [rememberCredentials, setRememberCredentials] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
+  const rememberCredentials = useSignal(false);
+  const errorMessage = useSignal<string | undefined>(undefined);
 
   useEffect((): void => {
     const cred = localStorage.getItem(Constants.LOCAL_STORAGE_CREDENTIALS);
@@ -45,31 +47,28 @@ function Login() {
   }
 
   function _errorSelector(err: unknown): Observable<LoginResDto> {
-    setErrorMessage((err as Error).message);
-    setIsProcessing(false);
+    errorMessage.value = (err as Error).message
+    isProcessing.value = false;
 
     return of(new LoginResDto());
   }
 
-  function _onSubmitRespond(params: LoginDto): (LoginResDto: LoginResDto) => void {
+  function _onSubmitRespond({ username }: LoginDto): (LoginResDto: LoginResDto) => void {
     return async ({ accessToken }: LoginResDto): Promise<void> => {
       if (!accessToken) {
         return;
       }
 
-      if (rememberCredentials) {
-        localStorage.setItem(Constants.LOCAL_STORAGE_CREDENTIALS, JSON.stringify(params));
-      }
-
       localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
+      localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
 
-      user.value = new User({ username: params.username, permissions: await firstValueFrom(getPermissionList())  });
+      user.value = new User({ username: username, permissions: await firstValueFrom(getPermissionList())  });
       navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
     };
   }
 
   function _requestLogin(params: LoginDto): void {
-    setIsProcessing(true);
+    isProcessing.value = true;
 
     login(params)
       .pipe(catchError(_errorSelector))
@@ -82,7 +81,7 @@ function Login() {
 
     for (const [key, value] of formData) {
       if (key === "isRemember") {
-        setRememberCredentials(true);
+        rememberCredentials.value = true;
         continue;
       }
 
@@ -112,12 +111,12 @@ function Login() {
           </div>
         </div>
         <div className="flex flex-col gap-20 p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
-          {isProcessing && <Loader />}
+          {isProcessing.value && <Loader />}
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-semibold">Login</h1>
             <p>Welcome back, please enter your credentials below to access your account and continue your creative journey.</p>
           </div>
-          <Form onSubmit={onFormSubmit} errorMessage={errorMessage} />
+          <Form onSubmit={onFormSubmit} errorMessage={errorMessage.value} />
         </div>
       </div>
     </div>

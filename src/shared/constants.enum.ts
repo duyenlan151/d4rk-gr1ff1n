@@ -1,6 +1,7 @@
 export enum Constants {
   LOCAL_STORAGE_CREDENTIALS = "credentials",
   LOCAL_STORAGE_TOKEN = "accessToken",
+  LOCAL_STORAGE_USERNAME = "currentUser",
   ROUTER_SNAPSHOT_PARAM_REDIRECT = "redirectPath",
 }
 

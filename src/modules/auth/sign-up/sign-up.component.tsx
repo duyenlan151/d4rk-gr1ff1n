@@ -5,7 +5,7 @@ import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";
-import { useState } from "react";
+import { useSignal } from "@preact/signals-react";
 import { Link } from "react-router-dom";
 
 import Form from "./form/form.component";
@@ -23,13 +23,11 @@ function SignUp() {
   const { signUp } = useAuthProvider();  
   const { user } = useUserContext();
 
-
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
-
+  const isProcessing = useSignal(false);
+  const errorMessage = useSignal<string | undefined>(undefined)
 
   function onFormSubmit(value: SignUpDto): void {
-    setIsProcessing(true);
+    isProcessing.value = true;
 
     signUp(value).pipe(catchError(_errorSelector)).subscribe(_onSubmitRespond(value));
   }
@@ -41,6 +39,7 @@ function SignUp() {
      }
 
      localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
+     localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
 
      user.value = new User({ username, permissions: await firstValueFrom(getPermissionList()) });
      navigate("/");
@@ -48,8 +47,8 @@ function SignUp() {
   }
 
   function _errorSelector(err: unknown): Observable<LoginResDto> {
-    setErrorMessage((err as Error).message);
-    setIsProcessing(false);
+    errorMessage.value = (err as Error).message;
+    isProcessing.value = false;
 
     return of(new LoginResDto());
   }
@@ -59,12 +58,12 @@ function SignUp() {
       <Background background={background} backgroundSmall={backgroundSmall}/>
       <div id="content" className="w-full h-full flex justify-between z-10">
         <div className="flex flex-col justify-between p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
-          {isProcessing && <Loader />}
+          {isProcessing.value && <Loader />}
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-semibold">Hi, Friend!</h1>
             <p>Unlock Your Creative Journey with Us!</p>
           </div>
-          <Form onSubmit={onFormSubmit} errorMessage={errorMessage} />
+          <Form onSubmit={onFormSubmit} errorMessage={errorMessage.value} />
           <div className="w-full flex justify-center">
             <p>Already got an account? <Link to="/login">Login</Link></p>
           </div>

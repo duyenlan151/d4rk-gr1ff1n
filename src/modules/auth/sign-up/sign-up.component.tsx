@@ -1,7 +1,8 @@
 import "./sign-up.component.scss";
 
+import { Observable, catchError, firstValueFrom, of } from "rxjs";
 import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
-import { Observable, catchError, of } from "rxjs";
+import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";
 import { useState } from "react";
@@ -17,7 +18,11 @@ import Logo from "../../../shared/components/logo/logo.component";
 
 function SignUp() {
   const navigate = useNavigate();
-  const { signUp } = useAuthProvider();
+
+  const { getPermissionList } = useUserProvider();
+  const { signUp } = useAuthProvider();  
+  const { user } = useUserContext();
+
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
@@ -26,16 +31,20 @@ function SignUp() {
   function onFormSubmit(value: SignUpDto): void {
     setIsProcessing(true);
 
-    signUp(value).pipe(catchError(_errorSelector)).subscribe(_onSubmitRespond);
+    signUp(value).pipe(catchError(_errorSelector)).subscribe(_onSubmitRespond(value));
   }
 
-  function _onSubmitRespond ({ accessToken }: LoginResDto): void  {
-    if (!accessToken) {
-      return;
-    }
+  function _onSubmitRespond ({ username }: SignUpDto)  {
+   return async ({ accessToken }: LoginResDto) => {
+     if (!accessToken) {
+       return;
+     }
 
-    localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
-    navigate("/");
+     localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
+
+     user.value = new User({ username, permissions: await firstValueFrom(getPermissionList()) });
+     navigate("/");
+   };
   }
 
   function _errorSelector(err: unknown): Observable<LoginResDto> {

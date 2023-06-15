@@ -20,7 +20,9 @@ function Form({ onSubmit, errorMessage }: IFormProps) {
           <InputLabel htmlFor="username">Username</InputLabel>
           <OutlinedInput id="username" name="username" label="Username" required/>
         </FormControl>
-        <PasswordTextField id="password" name="password" label="Password"/>
+        <FormControl>
+          <PasswordTextField id="password" name="password" label="Password"/>
+        </FormControl>
       </FormGroup>
       <div className="flex flex-row justify-between">
         <FormControlLabel control={<Checkbox name="isRemember" />} label="Remember Me" />

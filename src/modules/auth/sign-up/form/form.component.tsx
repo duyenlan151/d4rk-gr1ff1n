@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, FormControl, FormGroup, FormHelperText, InputLabel, OutlinedInput, SxProps, Theme } from "@mui/material";
 import { ClipboardEvent, Dispatch, FormEvent, FormEventHandler, SetStateAction, useEffect, useState } from "react"; 
-import { Observable, Subject, debounceTime, first, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
+import { Observable, Subject, debounceTime, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
 import { List } from "immutable";
 
 import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
@@ -250,8 +250,9 @@ function Form({ onSubmit }: IForm) {
       <FormGroup className="gap-6 flex flex-col">
         <FormControl 
           className="relative" 
-          color={typeof isUsernameValid === "boolean" ? !isUsernameValid ? "error" : "success" : "primary"} 
           onInput={_mapToEventEmitter(usernameInput$)}
+          color={typeof isUsernameValid === "boolean" ? !isUsernameValid ? "error" : "success" : "primary"} 
+          error={typeof isUsernameValid === "boolean" && !isUsernameValid}
         >
           <InputLabel htmlFor="username">Username</InputLabel>
           <OutlinedInput id="username" name="username" label="Username" required/>
@@ -264,8 +265,9 @@ function Form({ onSubmit }: IForm) {
 
         <FormControl 
           className="relative" 
-          color={typeof isEmailValid === "boolean" ? !isEmailValid ? "error" : "success" : "primary"} 
           onInput={_mapToEventEmitter(emailInput$)}
+          color={typeof isEmailValid === "boolean" ? !isEmailValid ? "error" : "success" : "primary"} 
+          error={typeof isEmailValid === "boolean" && !isEmailValid}
         >
           <InputLabel htmlFor="email">Email</InputLabel>
           <OutlinedInput id="email" name="email" label="Email" type="email" required/>
@@ -282,6 +284,7 @@ function Form({ onSubmit }: IForm) {
           onPaste={onInputControlCopyOrPaste} 
           onInput={_mapToEventEmitter(passwordInput$)}
           color={typeof isPasswordValid === "boolean" ? !isPasswordValid ? "error" : "success" : "primary"} 
+          error={typeof isPasswordValid === "boolean" && !isPasswordValid}
         >
           <PasswordTextField id="password" name="password" label="Password" />
           {
@@ -297,6 +300,7 @@ function Form({ onSubmit }: IForm) {
           onPaste={onInputControlCopyOrPaste} 
           onInput={_mapToEventEmitter(passwordRetypeInput$)}
           color={typeof isPasswordRetypeValid === "boolean" ? !isPasswordRetypeValid ? "error" : "success" : "primary"} 
+          error={typeof isPasswordRetypeValid === "boolean" && !isPasswordRetypeValid}
         >
           <PasswordTextField id="password-retype" name="passwordRetype" label="Confirm Password" />
           {

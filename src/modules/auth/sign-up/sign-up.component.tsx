@@ -70,7 +70,11 @@ function SignUp() {
         </div>
         <div className="branding flex flex-col gap-11 relative">
           <div id="logo-container" className="z-10 text-white relative">
-            <Logo className="w-32 h-32" fill="#fff"/>
+            <div className="cursor-pointer w-min">
+              <Link to="/">
+                  <Logo className="w-32 h-32" fill="#fff"/>
+              </Link>
+            </div>
             <div id="brand">
               <p id="logo" className="text-7xl font-medium uppercase subpixel-antialiased">D4rk Griffin</p>
               <p id="tagline" className="text-2xl font-medium subpixel-antialiased">Art Made Just for You – Commission Your Perfect Piece!</p>

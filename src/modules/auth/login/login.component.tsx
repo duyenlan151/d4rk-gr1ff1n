@@ -2,7 +2,7 @@ import "./login.component.scss";
 
 import { Observable, catchError, firstValueFrom, of } from "rxjs";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider.ts";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormEvent, useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
@@ -97,7 +97,11 @@ function Login() {
       <div id="content" className="w-full h-full flex justify-between z-10">
         <div className="branding flex flex-col gap-11 relative">
           <div id="logo-container" className="z-10 text-white relative">
-            <Logo className="w-32 h-32" fill="#fff"/>
+              <div className="cursor-pointer w-min">
+                <Link to="/">
+                    <Logo className="w-32 h-32" fill="#fff"/>
+                </Link>
+              </div>
             <div id="brand">
               <p id="logo" className="text-7xl font-medium uppercase subpixel-antialiased">D4rk Griffin</p>
               <p id="tagline" className="text-2xl font-medium subpixel-antialiased">Let's Create Magic Together - Your Art, Your Way!</p>

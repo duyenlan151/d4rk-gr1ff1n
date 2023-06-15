@@ -1,8 +1,8 @@
 import "./login.component.scss";
 
 import { FormEvent, useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Observable, catchError, of } from "rxjs";
-import { useNavigate } from "react-router-dom";
 
 import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provider";
 import backgroundSmall from "../../../assets/images/login-background-small.jpg";
@@ -15,7 +15,9 @@ import Logo from "../../../shared/components/logo/logo.component.tsx";
 
 function Login() {
   const navigate = useNavigate();
+  
   const { login } = useAuthProvider();
+  const [searchParams] = useSearchParams();
 
   // UI related
   const [isProcessing, setIsProcessing] = useState(false);
@@ -56,7 +58,7 @@ function Login() {
       }
 
       localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
-      navigate("/");
+      navigate(searchParams.has("redirectPath") ? searchParams.get("redirectPath") as string : "/");
     };
   }
 

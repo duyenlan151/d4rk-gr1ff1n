@@ -58,7 +58,11 @@ function Login() {
       }
 
       localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
-      navigate(searchParams.has("redirectPath") ? searchParams.get("redirectPath") as string : "/");
+      navigate(
+        searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT)
+          ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string)
+          : "/"
+      );
     };
   }
 

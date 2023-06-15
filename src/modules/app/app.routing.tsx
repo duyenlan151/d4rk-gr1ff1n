@@ -16,7 +16,7 @@ const Commission = lazy(() => import("./commission/commission.component"));
 
 export const routes: RouteObject[] = [
   {
-    path: "",
+    path: "home",
     element: <Landing />,
   },
   {
@@ -25,5 +25,5 @@ export const routes: RouteObject[] = [
     children: commissionRoutes,
     loader: authGuard,
   },
-  { path: "*", element: <Navigate to="" relative="route" /> },
+  { path: "*", element: <Navigate to="home" relative="route" /> },
 ];

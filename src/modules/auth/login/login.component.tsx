@@ -119,7 +119,7 @@ function Login() {
           </div>
         </div>
         <div className="flex flex-col gap-20 p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
-          {isProcessing.value && <Loader />}
+          <Loader isVisible={isProcessing}/>
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-semibold">Login</h1>
             <p>Welcome back, please enter your credentials below to access your account and continue your creative journey.</p>

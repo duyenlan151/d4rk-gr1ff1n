@@ -1,15 +1,15 @@
-import "./loader.component.css";
+import { Backdrop, CircularProgress } from "@mui/material";
+import { Signal } from "@preact/signals-react";
 
-function Loader() {
+interface ILoader {
+  isVisible: Signal<boolean>;
+}
+
+function Loader({ isVisible }: ILoader) {
   return (
-    <div id="loader-container" className="absolute w-full h-full top-0 left-0 flex items-center justify-center">
-      <div className="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
+    <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={isVisible.value}>
+      <CircularProgress color="inherit" />
+    </Backdrop>
   );
 }
 

@@ -25,7 +25,7 @@ function App() {
   const { showToast } = useToastContext();
 
   useEffect(() => {
-    if (location.state?._isRedirect) {
+    if (location.state?._isRedirect && user.value) {
       forkJoin([getPermissionList(), getRoleList()]).subscribe(
         ([permissions, roles]) => {
           user.value = user.value?.withMutations((_user) =>

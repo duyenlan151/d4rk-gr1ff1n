@@ -3,6 +3,7 @@ import { Button, FormControl, FormGroup, FormHelperText, InputLabel, OutlinedInp
 import { Observable, Subject, debounceTime, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
 import { ClipboardEvent, FormEvent, FormEventHandler, useEffect } from "react"; 
 import { Signal, useSignal } from "@preact/signals-react";
+import { useToastContext } from "../../../../shared/providers/toast.provider";
 import { List } from "immutable";
 
 import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
@@ -24,6 +25,7 @@ enum SignUpControl {
 
 function Form({ onSubmit }: IForm) {
   const { checkUser } = useAuthProvider();
+  const { showToast } = useToastContext();
 
   const buttonOverriddenStyles: SxProps<Theme> = { padding: '0', height: '50px', width: '100%', borderRadius: '5px' };
   const initErrorList = List<string>();
@@ -79,6 +81,7 @@ function Form({ onSubmit }: IForm) {
     event.preventDefault();
 
     if (!_isFormValid()) {
+      showToast("Please check invalid fields", { severity: "error" });
       return;
     }
 

@@ -1,6 +1,7 @@
 import { Tooltip, Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
-import { Settings, Logout } from "@mui/icons-material";
+import { Settings, Logout, Handyman } from "@mui/icons-material";
 import { useUserContext } from "../../../../providers/user.provider";
+import { useNavigate } from "react-router-dom";
 import { MouseEvent } from "react";
 import { useSignal } from "@preact/signals-react";
 import { Constants } from "../../../../constants.enum";
@@ -35,28 +36,31 @@ const paperStyle = {
 function ProfileMenu() {
   const { user } = useUserContext();
   const anchorEl = useSignal<null | HTMLElement>(null);
+  const navigate = useNavigate();
 
   function onProfileClicked(event: MouseEvent<HTMLElement>): void {
     _openMenu(event.currentTarget as HTMLElement);
   }
 
-  function onLogoutBtnClicked() {
-    _closeMenu();
+  function onAdminToolkitClicked(): void {
+    navigate("/admin");
+  }
 
+  function onLogoutBtnClicked(): void {
     localStorage.removeItem(Constants.LOCAL_STORAGE_TOKEN);
     localStorage.removeItem(Constants.LOCAL_STORAGE_USERNAME);
     user.value = undefined;
   }
 
-  function onMenuClosed() {
+  function onMenuClosed(): void {
     _closeMenu();
   }
 
-  function _openMenu(target: HTMLElement) {
+  function _openMenu(target: HTMLElement): void {
     anchorEl.value = target;
   }
 
-  function _closeMenu() {
+  function _closeMenu(): void {
     anchorEl.value = null;
   }
 
@@ -79,11 +83,23 @@ function ProfileMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={onMenuClosed} className="flex-col" sx={{ alignItems: 'start' }}>
+        <MenuItem
+          onClick={onMenuClosed}
+          className="flex-col"
+          sx={{ alignItems: "start" }}
+        >
           <div>Signed in as:</div>
           <div className="font-semibold">{user.value?.username}</div>
         </MenuItem>
         <Divider />
+        {user.value?.roles?.includes("Admin") ? (
+          <MenuItem onClick={onAdminToolkitClicked}>
+            <ListItemIcon>
+              <Handyman fontSize="small" />
+            </ListItemIcon>
+            Admin toolkit
+          </MenuItem>
+        ) : undefined}
         <MenuItem onClick={onMenuClosed}>
           <ListItemIcon>
             <Settings fontSize="small" />

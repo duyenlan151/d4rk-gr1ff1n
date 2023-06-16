@@ -7,10 +7,10 @@ import "./app.component.scss";
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useUserContext, useUserProvider } from "../../shared/providers/user.provider";
 import { useEffect } from "react";
+import { forkJoin } from "rxjs";
 
 import Header from "../../shared/layout/header/header.component";
 import Footer from "../../shared/layout/footer/footer.component";
-import { forkJoin } from "rxjs";
 
 function App() {
   const pattern = "/";

@@ -1,6 +1,7 @@
 import { Tooltip, Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
 import { MouseEvent, MouseEventHandler } from "react";
 import { Settings, Logout, Handyman } from "@mui/icons-material";
+import { useToastContext } from "../../../../providers/toast.provider";
 import { useUserContext } from "../../../../providers/user.provider";
 import { useNavigate } from "react-router-dom";
 import { useSignal } from "@preact/signals-react";
@@ -35,6 +36,7 @@ const paperStyle = {
 
 function ProfileMenu() {
   const { user } = useUserContext();
+  const { showToast } = useToastContext();
   const anchorEl = useSignal<null | HTMLElement>(null);
   const navigate = useNavigate();
 
@@ -50,6 +52,7 @@ function ProfileMenu() {
     localStorage.removeItem(Constants.LOCAL_STORAGE_TOKEN);
     localStorage.removeItem(Constants.LOCAL_STORAGE_USERNAME);
     user.value = undefined;
+    showToast("Logged out successfully");
     navigate("/");
   }
 

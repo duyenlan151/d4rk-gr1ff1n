@@ -7,6 +7,7 @@ import "./app.component.scss";
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useUserContext, useUserProvider } from "../../shared/providers/user.provider";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
+import { useToastContext } from "../../shared/providers/toast.provider";
 import { useEffect } from "react";
 import { forkJoin } from "rxjs";
 
@@ -21,6 +22,7 @@ function App() {
 
   const { getPermissionList, getRoleList } = useUserProvider();
   const { user } = useUserContext();
+  const { showToast } = useToastContext();
 
   useEffect(() => {
     if (location.state?._isRedirect) {
@@ -31,15 +33,17 @@ function App() {
           );
         }
       );
+
+      showToast("You do not have permission to access that resource!", { severity: "error", duration: 2000 });
     }
 
     if (match) {
       navigate("/home");
     }
-  });
+  }, [location]);
 
   return (
-    <div id="content-wrapper" className="app-wrapper bg-[#F1F1F1] min-h-screen">
+    <div id="content-wrapper" className="app-wrapper bg-[#f1f1f1] min-h-screen">
       <div id="header-container" className="w-full shadow-md z-10 shadow-slate-500/30 ">
         <Header />
       </div>

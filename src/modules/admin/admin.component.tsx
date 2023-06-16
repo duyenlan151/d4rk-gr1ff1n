@@ -21,7 +21,7 @@ function Admin() {
   }, [location]);
 
   return (
-    <div id="content-wrapper" className="login-wrapper bg-[#F1F1F1] min-h-screen">
+    <div id="content-wrapper" className="admin-wrapper bg-[#F1F1F1] min-h-screen">
       <div id="header-container" className="w-full shadow-md z-10 shadow-slate-500/30">
         <Header />
       </div>

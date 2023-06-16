@@ -3,6 +3,7 @@ import "./sign-up.component.scss";
 import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
 import { Observable, catchError, forkJoin, of } from "rxjs";
+import { useToastContext } from "../../../shared/providers/toast.provider";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
@@ -20,7 +21,8 @@ function SignUp() {
   const navigate = useNavigate();
 
   const { getPermissionList, getRoleList } = useUserProvider();
-  const { signUp } = useAuthProvider();  
+  const { signUp } = useAuthProvider();
+  const { showToast } = useToastContext();
   const { user } = useUserContext();
 
   const isProcessing = useSignal(false);
@@ -44,6 +46,7 @@ function SignUp() {
      forkJoin([getPermissionList(), getRoleList()]).subscribe(
       ([permissions, roles]) => {
         user.value = new User({ permissions, roles, username })
+        showToast("Signed up successfully.")
         navigate("/");
       }
     );

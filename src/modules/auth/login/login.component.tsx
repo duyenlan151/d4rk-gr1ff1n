@@ -4,6 +4,7 @@ import { User, useUserContext, useUserProvider } from "../../../shared/providers
 import { Observable, catchError, forkJoin, of } from "rxjs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormEvent, useEffect } from "react";
+import { useToastContext } from "../../../shared/providers/toast.provider.ts";
 import { Constants } from "../../../shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
 
@@ -23,6 +24,7 @@ function Login() {
   
   const { getPermissionList, getRoleList } = useUserProvider();
   const { user } = useUserContext();
+  const { showToast } = useToastContext()
   const { login } = useAuthProvider();
 
   // UI related
@@ -64,6 +66,8 @@ function Login() {
 
       forkJoin([getPermissionList(), getRoleList()]).subscribe(
         ([permissions, roles]) => {
+          showToast("Logged in successfully.")
+
           user.value = new User({ permissions, roles, username });
           navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
         }

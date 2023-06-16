@@ -8,6 +8,7 @@ import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
 import { forkJoin } from "rxjs"
 import { routes } from "./root.routing";
+import ToastProvider from "./shared/components/toast/toast.component";
 
 const router = createBrowserRouter(routes);
 
@@ -33,7 +34,9 @@ function Root() {
 
   return (
     <UserContext.Provider value={{ user }}>
-      <RouterProvider router={router} />
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
     </UserContext.Provider>
   );
 }

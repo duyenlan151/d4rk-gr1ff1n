@@ -1,8 +1,8 @@
 import { Tooltip, Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
+import { MouseEvent, MouseEventHandler } from "react";
 import { Settings, Logout, Handyman } from "@mui/icons-material";
 import { useUserContext } from "../../../../providers/user.provider";
 import { useNavigate } from "react-router-dom";
-import { MouseEvent } from "react";
 import { useSignal } from "@preact/signals-react";
 import { Constants } from "../../../../constants.enum";
 
@@ -42,8 +42,8 @@ function ProfileMenu() {
     _openMenu(event.currentTarget as HTMLElement);
   }
 
-  function onAdminToolkitClicked(): void {
-    navigate("/admin/dashboard");
+  function _handleNavigationClick(to: string): MouseEventHandler<HTMLElement> {
+    return (): void => navigate(to);
   }
 
   function onLogoutBtnClicked(): void {
@@ -84,13 +84,13 @@ function ProfileMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={onMenuClosed} className="flex-col" sx={{ alignItems: "start" }}>
+        <MenuItem onClick={_handleNavigationClick(`/${user.value?.username}`)} className="flex-col" sx={{ alignItems: "start" }}>
           <div>Signed in as:</div>
           <div className="font-semibold">{user.value?.username}</div>
         </MenuItem>
         <Divider />
         {user.value?.roles?.includes("Admin") ? (
-          <MenuItem onClick={onAdminToolkitClicked}>
+          <MenuItem onClick={_handleNavigationClick("/admin/dashboard")}>
             <ListItemIcon>
               <Handyman fontSize="small" />
             </ListItemIcon>

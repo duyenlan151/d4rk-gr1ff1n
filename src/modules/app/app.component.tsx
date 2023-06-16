@@ -6,6 +6,7 @@ import "./app.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useUserContext, useUserProvider } from "../../shared/providers/user.provider";
+import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { useEffect } from "react";
 import { forkJoin } from "rxjs";
 
@@ -17,7 +18,7 @@ function App() {
   const match = useMatch(pattern);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const { getPermissionList, getRoleList } = useUserProvider();
   const { user } = useUserContext();
 
@@ -38,12 +39,18 @@ function App() {
   });
 
   return (
-    <div id="content-wrapper">
-      <Header />
-      <div id="content">
-        <Outlet />
+    <div id="content-wrapper" className="app-wrapper bg-[#F1F1F1] min-h-screen">
+      <div id="header-container" className="w-full shadow-md z-10 shadow-slate-500/30 ">
+        <Header />
       </div>
-      <Footer />
+      <OverlayScrollbarsComponent defer id="content">
+        <div className="w-full flex flex-col items-center h-full">
+          <div id="container" className="container bg-white p-3.5 min-h-full h-full">
+            <Outlet />
+          </div>
+          <Footer />
+        </div>
+      </OverlayScrollbarsComponent>
     </div>
   );
 }

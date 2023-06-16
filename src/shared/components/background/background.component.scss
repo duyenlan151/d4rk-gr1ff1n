@@ -1,10 +1,12 @@
-#image-container::before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: #1d1d1dbd;
-  content: "";
-  z-index: 1;
+.background-wrapper {
+  .backdrop #image-container::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #1d1d1dbd;
+    content: "";
+    z-index: 1;
+  }
 }

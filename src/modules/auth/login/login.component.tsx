@@ -100,9 +100,9 @@ function Login() {
   }
 
   return (
-    <div className="w-screen h-screen p-36 relative">
-      <Background background={background} backgroundSmall={backgroundSmall}/>
-      <div id="content" className="w-full h-full flex justify-between z-10">
+    <div className="login-wrapper w-screen h-screen p-36 relative">
+      <Background background={background} backgroundSmall={backgroundSmall} backdrop/>
+      <div id="content" className="w-full h-full flex justify-between">
         <div className="branding flex flex-col gap-11 relative">
           <div id="logo-container" className="z-10 text-white relative">
               <div className="cursor-pointer w-min">

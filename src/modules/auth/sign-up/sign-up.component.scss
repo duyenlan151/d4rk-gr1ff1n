@@ -1,13 +1,10 @@
 @import "../../../shared/styles/_variables";
 
-
-#logo-container {  
-  #logo {
+.sign-up-wrapper {
+  .logo {
     font-family: $fredericko-font;
   }
-}
 
-#description-container {
   .description {
     width: 75ch;
   }

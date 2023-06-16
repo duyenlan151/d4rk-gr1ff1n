@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import 'overlayscrollbars/overlayscrollbars.css';
 import "./shared/styles/_global.scss";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -8,6 +9,7 @@ import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
 import { forkJoin } from "rxjs"
 import { routes } from "./root.routing";
+
 import ToastProvider from "./shared/components/toast/toast.component";
 
 const router = createBrowserRouter(routes);

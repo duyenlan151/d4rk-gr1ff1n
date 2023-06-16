@@ -6,7 +6,7 @@ import Logo from "../../components/logo/logo.component";
 
 function AdminHeader() {
   return (
-    <header className="w-full h-20 flex justify-center bg-white">
+    <header className="w-full h-14 flex justify-center bg-white">
       <div className="container h-full flex items-center justify-between font-medium">
         <div id="public-section" className="flex gap-10 h-full items-center">
           <div id="branding">

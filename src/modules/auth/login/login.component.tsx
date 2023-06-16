@@ -93,7 +93,13 @@ function Login() {
         continue;
       }
 
-      logInDto = logInDto.set(key as keyof ILoginDto, value as string);
+      let _value = value as string;
+
+      if (key === "username") {
+        _value = _value.toLowerCase();
+      }
+
+      logInDto = logInDto.set(key as keyof ILoginDto, _value);
     }
 
     return logInDto;

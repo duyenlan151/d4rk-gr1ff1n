@@ -94,7 +94,12 @@ function Form({ onSubmit }: IForm) {
   useEffect(() => {
     const onDestroy$ = new Subject<void>();
 
-    const usernameValueChanged$ = _validateInputValue(_debounceInput(usernameInput$), [_checkUser(SignUpControl.USERNAME)], userNameErrors);
+    const lowerCaseUserNameInput$ = _debounceInput(usernameInput$).pipe(
+      map((username) => username.toLowerCase())
+    );
+    
+    // Input value change events
+    const usernameValueChanged$ = _validateInputValue(lowerCaseUserNameInput$, [_checkUser(SignUpControl.USERNAME)], userNameErrors);
     const emailValueChanged$ = _validateInputValue(_debounceInput(emailInput$), [_checkEmailFormat, _checkUser(SignUpControl.EMAIL)], emailErrors);
     const passwordValueChanged$ = _validateInputValue(_debounceInput(passwordInput$), [_checkPassword], passwordErrors);
     const passwordRetypeValueChanged$ = _validateInputValue(_debounceInput(passwordRetypeInput$), [_checkPasswordRetype], passwordRetypeErrors);

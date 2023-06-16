@@ -59,12 +59,6 @@ function ToastProvider({ children }: PropsWithChildren) {
       _message.value = _messages.value.first();
       _messages.value = _messages.value.pop();
       _isVisible.value = true;
-
-      return;
-    }
-
-    if (_messages.value.size && _message.value && _isVisible.value) {
-      _isVisible.value = false;
     }
   }
 

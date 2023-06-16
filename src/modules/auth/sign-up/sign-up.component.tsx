@@ -62,7 +62,7 @@ function SignUp() {
 
   return (
     <div className="sign-up-wrapper w-screen h-screen p-36 relative">
-      <Background background={background} backgroundSmall={backgroundSmall} backdrop/>
+      <Background background={background} backgroundSmall={backgroundSmall} backdrop />
       <div id="content" className="w-full h-full flex justify-between z-10">
         <div className="flex flex-col justify-between p-16 shadow-lg shadow-stone-950/60 rounded-lg w-4/12 relative bg-white">
           <Loader isVisible={isProcessing}/>

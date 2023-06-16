@@ -101,7 +101,7 @@ function Login() {
 
   return (
     <div className="login-wrapper w-screen h-screen p-36 relative">
-      <Background background={background} backgroundSmall={backgroundSmall} backdrop/>
+      <Background background={background} backgroundSmall={backgroundSmall} backdrop />
       <div id="content" className="w-full h-full flex justify-between">
         <div className="branding flex flex-col gap-11 relative">
           <div id="logo-container" className="z-10 text-white relative">

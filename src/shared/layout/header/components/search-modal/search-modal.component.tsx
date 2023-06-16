@@ -3,7 +3,7 @@ import { Search } from "@mui/icons-material";
 import { Signal } from "@preact/signals-react";
 
 interface ISearchModal {
-  isVisible: Signal<boolean>
+  isVisible: Signal<boolean>;
 }
 
 function SearchModal({ isVisible }: ISearchModal) {

@@ -6,7 +6,6 @@ import { routes as adminRoutes } from "./modules/admin/admin.routing.tsx";
 import { routes as appRoutes } from "./modules/app/app.routing.tsx";
 
 // Guards
-import composedGuard from "./shared/guards/composed.guard.ts";
 import authGuard from "./shared/guards/auth.guard.ts";
 import noAuthGuard from "./shared/guards/no-auth.guard.ts";
 
@@ -30,7 +29,7 @@ export const routes: RouteObject[] = [
     path: "admin",
     element: <Admin />,
     children: adminRoutes,
-    loader: composedGuard(authGuard),
+    loader: authGuard,
   },
   {
     path: "login",

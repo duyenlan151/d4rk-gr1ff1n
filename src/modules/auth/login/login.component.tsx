@@ -66,7 +66,7 @@ function Login() {
 
       forkJoin([getPermissionList(), getRoleList()]).subscribe(
         ([permissions, roles]) => {
-          showToast("Logged in successfully.")
+          showToast("Logged in successfully.");
 
           user.value = new User({ permissions, roles, username });
           navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");

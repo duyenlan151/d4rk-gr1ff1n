@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, FormControl, FormGroup, FormHelperText, InputLabel, OutlinedInput, SxProps, Theme } from "@mui/material";
-import { ClipboardEvent, Dispatch, FormEvent, FormEventHandler, SetStateAction, useEffect, useState } from "react"; 
 import { Observable, Subject, debounceTime, forkJoin, iif, map, of, switchMap, takeUntil, tap } from "rxjs";
+import { ClipboardEvent, FormEvent, FormEventHandler, useEffect } from "react"; 
+import { Signal, useSignal } from "@preact/signals-react";
 import { List } from "immutable";
 
 import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
@@ -28,28 +29,28 @@ function Form({ onSubmit }: IForm) {
   const initErrorList = List<string>();
   
   // Form value
-  const [formValue, setFormValue] = useState(new SignUpFormDto());
+  const formValue = useSignal(new SignUpFormDto());
 
   // Validation status
-  const [isUsernameValid, setIsUsernameValid] = useState<boolean | undefined>(undefined);
-  const [isEmailValid, setIsEmailValid] = useState<boolean | undefined>(undefined);
-  const [isPasswordValid, setIsPasswordValid] = useState<boolean | undefined>(undefined);
-  const [isPasswordRetypeValid, setPasswordRetypeValid] = useState<boolean | undefined>(undefined);
+  const isUsernameValid = useSignal<boolean | undefined>(undefined);
+  const isEmailValid = useSignal<boolean | undefined>(undefined);
+  const isPasswordValid = useSignal<boolean | undefined>(undefined);
+  const isPasswordRetypeValid = useSignal<boolean | undefined>(undefined);
 
   // Validation Errors
-  const [userNameErrors, setUsernameErrors] = useState<List<string>>(initErrorList);
-  const [emailErrors, setEmailErrors] = useState<List<string>>(initErrorList);
-  const [passwordErrors, setPasswordErrors] = useState<List<string>>(initErrorList);
-  const [passwordRetypeErrors, setPasswordRetypeErrors] = useState<List<string>>(initErrorList);
+  const userNameErrors = useSignal<List<string>>(initErrorList);
+  const emailErrors = useSignal<List<string>>(initErrorList);
+  const passwordErrors = useSignal<List<string>>(initErrorList);
+  const passwordRetypeErrors = useSignal<List<string>>(initErrorList);
 
   // Form event
-  const [formValueChanged$] = useState(new Subject<Record<string, string>>());
+  const { value: formValueChanged$ } = useSignal(new Subject<Partial<ISignUpFormDto>>());
 
   // Form Control events
-  const [usernameInput$] = useState(new Subject<string>());
-  const [emailInput$] = useState(new Subject<string>());
-  const [passwordInput$] = useState(new Subject<string>());
-  const [passwordRetypeInput$] = useState(new Subject<string>());
+  const { value: usernameInput$ } = useSignal(new Subject<string>());
+  const { value: emailInput$ } = useSignal(new Subject<string>());
+  const { value: passwordInput$ } = useSignal(new Subject<string>());
+  const { value: passwordRetypeInput$ } = useSignal(new Subject<string>());
 
   // ==========================================
   // Event Handlers
@@ -58,30 +59,30 @@ function Form({ onSubmit }: IForm) {
     event.preventDefault();
   }
 
-  function onFormValueChanged(obj: Record<string, string>): void {
+  function onFormValueChanged(obj: Partial<ISignUpFormDto>): void {
     const [[key, value]] = Object.entries(obj);
 
-    if (key === SignUpControl.PASSWORD && formValue.passwordRetype) {
-      const validRetype = formValue.passwordRetype === value
+    if (key === SignUpControl.PASSWORD && formValue.value.passwordRetype) {
+      const validRetype = formValue.value.passwordRetype === value
 
       if (!validRetype) {
-        setPasswordRetypeErrors(List(["Does not match with password!"]));
+        passwordRetypeErrors.value = List(["Does not match with password!"]);
       }
 
-      setPasswordRetypeValid(validRetype);
+      isPasswordRetypeValid.value = validRetype;
     }
 
-    setFormValue(formValue.set(key as keyof ISignUpFormDto, value));
+    formValue.value = formValue.value.set(key as keyof ISignUpFormDto, value);
   }
 
   function onFormSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
 
-    if (!(isUsernameValid && isEmailValid && isPasswordValid && isPasswordRetypeValid)) {
+    if (!_isFormValid()) {
       return;
     }
 
-    onSubmit(new SignUpDto(formValue));
+    onSubmit(new SignUpDto(formValue.value));
   }
   // ==========================================
   // Event Handlers
@@ -90,28 +91,28 @@ function Form({ onSubmit }: IForm) {
   useEffect(() => {
     const onDestroy$ = new Subject<void>();
 
-    const usernameValueChanged$ = _validateInputValue(_debounceInput(usernameInput$), [_checkUser(SignUpControl.USERNAME)], setUsernameErrors);
-    const emailValueChanged$ = _validateInputValue(_debounceInput(emailInput$), [_checkEmailFormat, _checkUser(SignUpControl.EMAIL)], setEmailErrors);
-    const passwordValueChanged$ = _validateInputValue(_debounceInput(passwordInput$), [_checkPassword], setPasswordErrors);
-    const passwordRetypeValueChanged$ = _validateInputValue(_debounceInput(passwordRetypeInput$), [_checkPasswordRetype], setPasswordRetypeErrors);
+    const usernameValueChanged$ = _validateInputValue(_debounceInput(usernameInput$), [_checkUser(SignUpControl.USERNAME)], userNameErrors);
+    const emailValueChanged$ = _validateInputValue(_debounceInput(emailInput$), [_checkEmailFormat, _checkUser(SignUpControl.EMAIL)], emailErrors);
+    const passwordValueChanged$ = _validateInputValue(_debounceInput(passwordInput$), [_checkPassword], passwordErrors);
+    const passwordRetypeValueChanged$ = _validateInputValue(_debounceInput(passwordRetypeInput$), [_checkPasswordRetype], passwordRetypeErrors);
 
     _registerStore(formValueChanged$, onFormValueChanged);
-    _registerStore(usernameValueChanged$, _handleValueChange(SignUpControl.USERNAME, setIsUsernameValid));
-    _registerStore(emailValueChanged$, _handleValueChange(SignUpControl.EMAIL,setIsEmailValid));
-    _registerStore(passwordValueChanged$, _handleValueChange(SignUpControl.PASSWORD,setIsPasswordValid));
-    _registerStore(passwordRetypeValueChanged$, _handleValueChange(SignUpControl.PASSWORD_RETYPE, setPasswordRetypeValid));
+    _registerStore(usernameValueChanged$, _handleValueChange(SignUpControl.USERNAME, isUsernameValid));
+    _registerStore(emailValueChanged$, _handleValueChange(SignUpControl.EMAIL,isEmailValid));
+    _registerStore(passwordValueChanged$, _handleValueChange(SignUpControl.PASSWORD,isPasswordValid));
+    _registerStore(passwordRetypeValueChanged$, _handleValueChange(SignUpControl.PASSWORD_RETYPE, isPasswordRetypeValid));
 
     function _registerStore<T>(store$: Observable<T>, processor: (data: T) => void) {
       store$.pipe(takeUntil(onDestroy$)).subscribe(processor);
     }
 
     return () => onDestroy$.next();
-  }, [isUsernameValid, isEmailValid, isPasswordValid, isPasswordRetypeValid, formValue]);
+  }, [isUsernameValid.value, isEmailValid.value, isPasswordValid.value, isPasswordRetypeValid.value, formValue.value]);
 
   // ==========================================
   // Helper Functions
   // ==========================================
-  function _validateInputValue(input$: Observable<string>, validatorFn: ValidatorFn<string>[], errorSetter: Dispatch<SetStateAction<List<string>>>): Observable<[string, boolean | undefined]> {
+  function _validateInputValue(input$: Observable<string>, validatorFn: ValidatorFn<string>[], signal: Signal<List<string>>): Observable<[string, boolean | undefined]> {
     let errorList: string[];
     let inputValue = "";
     
@@ -129,7 +130,7 @@ function Form({ onSubmit }: IForm) {
       tap((value) => (inputValue = value)),
       switchMap(composedValidator),
       map((value): [string, boolean | undefined] => [inputValue, value]),
-      tap(() => errorSetter(List(errorList)))
+      tap(() => signal.value = List(errorList))
     );
   }
 
@@ -137,15 +138,24 @@ function Form({ onSubmit }: IForm) {
     return (event: FormEvent<HTMLInputElement>) => eventEmitter$.next((event.target as HTMLInputElement).value);
   }
 
-  function _handleValueChange(propName: string, stateSetter: Dispatch<SetStateAction<boolean | undefined>>) {
+  function _handleValueChange(propName: string, signal: Signal<boolean | undefined>) {
     return ([value, isValid]: [string, boolean | undefined]): void => {
-      stateSetter(isValid);
+      signal.value = isValid
       formValueChanged$.next({ [propName]: value });
     };
   }
 
   function _debounceInput<T>(input$: Observable<T>): Observable<T> {
     return input$.pipe(debounceTime(500));
+  }
+
+  function _isFormValid(): boolean {
+    return Boolean(
+      isUsernameValid.value &&
+        isEmailValid.value &&
+        isPasswordValid.value &&
+        isPasswordRetypeValid.value
+    ).valueOf();
   }
   // ==========================================
   // Helper Functions
@@ -235,7 +245,7 @@ function Form({ onSubmit }: IForm) {
   }
 
   function _checkPasswordRetype(password: string, mutativeErrorList: string[]): Observable<boolean | undefined> {
-    return of(!password.length ?  undefined : formValue.password === password).pipe(tap(isValid => {
+    return of(!password.length ?  undefined : formValue.value.password === password).pipe(tap(isValid => {
       if (!isValid) {
         mutativeErrorList.push("Does not match with password!")
       }
@@ -251,30 +261,30 @@ function Form({ onSubmit }: IForm) {
         <FormControl 
           className="relative" 
           onInput={_mapToEventEmitter(usernameInput$)}
-          color={typeof isUsernameValid === "boolean" ? !isUsernameValid ? "error" : "success" : "primary"} 
-          error={typeof isUsernameValid === "boolean" && !isUsernameValid}
+          color={typeof isUsernameValid.value === "boolean" ? !isUsernameValid.value ? "error" : "success" : "primary"} 
+          error={typeof isUsernameValid.value === "boolean" && !isUsernameValid.value}
         >
           <InputLabel htmlFor="username">Username</InputLabel>
           <OutlinedInput id="username" name="username" label="Username" required/>
           {
-            typeof isUsernameValid === "boolean" && 
-            !isUsernameValid && 
-            <FormHelperText className="absolute -bottom-5 -left-2" error>{userNameErrors.first()}</FormHelperText>
+            typeof isUsernameValid.value === "boolean" && 
+            !isUsernameValid.value && 
+            <FormHelperText className="absolute -bottom-5 -left-2" error>{userNameErrors.value.first()}</FormHelperText>
           }
         </FormControl>
 
         <FormControl 
           className="relative" 
           onInput={_mapToEventEmitter(emailInput$)}
-          color={typeof isEmailValid === "boolean" ? !isEmailValid ? "error" : "success" : "primary"} 
-          error={typeof isEmailValid === "boolean" && !isEmailValid}
+          color={typeof isEmailValid.value === "boolean" ? !isEmailValid.value ? "error" : "success" : "primary"} 
+          error={typeof isEmailValid.value === "boolean" && !isEmailValid.value}
         >
           <InputLabel htmlFor="email">Email</InputLabel>
           <OutlinedInput id="email" name="email" label="Email" type="email" required/>
           {
-            typeof isEmailValid === "boolean" && 
-            !isEmailValid && 
-            <FormHelperText className="absolute -bottom-5 -left-2" error>{emailErrors.first()}</FormHelperText>
+            typeof isEmailValid.value === "boolean" && 
+            !isEmailValid.value && 
+            <FormHelperText className="absolute -bottom-5 -left-2" error>{emailErrors.value.first()}</FormHelperText>
           }
         </FormControl>
 
@@ -283,14 +293,14 @@ function Form({ onSubmit }: IForm) {
           onCopy={onInputControlCopyOrPaste} 
           onPaste={onInputControlCopyOrPaste} 
           onInput={_mapToEventEmitter(passwordInput$)}
-          color={typeof isPasswordValid === "boolean" ? !isPasswordValid ? "error" : "success" : "primary"} 
-          error={typeof isPasswordValid === "boolean" && !isPasswordValid}
+          color={typeof isPasswordValid.value === "boolean" ? !isPasswordValid.value ? "error" : "success" : "primary"} 
+          error={typeof isPasswordValid.value === "boolean" && !isPasswordValid.value}
         >
           <PasswordTextField id="password" name="password" label="Password" />
           {
-            typeof isPasswordValid === "boolean" && 
-            !isPasswordValid && 
-            <FormHelperText className="absolute -bottom-5 -left-2" error>{passwordErrors.first()}</FormHelperText>
+            typeof isPasswordValid.value === "boolean" && 
+            !isPasswordValid.value && 
+            <FormHelperText className="absolute -bottom-5 -left-2" error>{passwordErrors.value.first()}</FormHelperText>
           }
         </FormControl>
 
@@ -299,14 +309,14 @@ function Form({ onSubmit }: IForm) {
           onCopy={onInputControlCopyOrPaste} 
           onPaste={onInputControlCopyOrPaste} 
           onInput={_mapToEventEmitter(passwordRetypeInput$)}
-          color={typeof isPasswordRetypeValid === "boolean" ? !isPasswordRetypeValid ? "error" : "success" : "primary"} 
-          error={typeof isPasswordRetypeValid === "boolean" && !isPasswordRetypeValid}
+          color={typeof isPasswordRetypeValid.value === "boolean" ? !isPasswordRetypeValid.value ? "error" : "success" : "primary"} 
+          error={typeof isPasswordRetypeValid.value === "boolean" && !isPasswordRetypeValid.value}
         >
           <PasswordTextField id="password-retype" name="passwordRetype" label="Confirm Password" />
           {
-            typeof isPasswordRetypeValid === "boolean" && 
-            !isPasswordRetypeValid && 
-            <FormHelperText className="absolute -bottom-5 -left-2" error>{passwordRetypeErrors.first()}</FormHelperText>
+            typeof isPasswordRetypeValid.value === "boolean" && 
+            !isPasswordRetypeValid.value && 
+            <FormHelperText className="absolute -bottom-5 -left-2" error>{passwordRetypeErrors.value.first()}</FormHelperText>
           }
         </FormControl>
       </FormGroup>

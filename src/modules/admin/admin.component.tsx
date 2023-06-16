@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
-import { Link, Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
+
+import Header from "../../shared/layout/header/admin-header.component";
 
 function Admin() {
   const pattern = "/admin";
@@ -16,7 +18,7 @@ function Admin() {
 
   return (
     <div id="content-wrapper">
-      <Link to="user-manager" relative="route">user manager</Link>
+      <Header />
       <div id="content">
         <Outlet />
       </div>

@@ -43,13 +43,14 @@ function ProfileMenu() {
   }
 
   function onAdminToolkitClicked(): void {
-    navigate("/admin");
+    navigate("/admin/dashboard");
   }
 
   function onLogoutBtnClicked(): void {
     localStorage.removeItem(Constants.LOCAL_STORAGE_TOKEN);
     localStorage.removeItem(Constants.LOCAL_STORAGE_USERNAME);
     user.value = undefined;
+    navigate("/");
   }
 
   function onMenuClosed(): void {
@@ -83,11 +84,7 @@ function ProfileMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem
-          onClick={onMenuClosed}
-          className="flex-col"
-          sx={{ alignItems: "start" }}
-        >
+        <MenuItem onClick={onMenuClosed} className="flex-col" sx={{ alignItems: "start" }}>
           <div>Signed in as:</div>
           <div className="font-semibold">{user.value?.username}</div>
         </MenuItem>

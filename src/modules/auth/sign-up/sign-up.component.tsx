@@ -1,8 +1,8 @@
 import "./sign-up.component.scss";
 
-import { Observable, catchError, firstValueFrom, of } from "rxjs";
 import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
+import { Observable, catchError, forkJoin, of } from "rxjs";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
@@ -19,7 +19,7 @@ import Logo from "../../../shared/components/logo/logo.component";
 function SignUp() {
   const navigate = useNavigate();
 
-  const { getPermissionList } = useUserProvider();
+  const { getPermissionList, getRoleList } = useUserProvider();
   const { signUp } = useAuthProvider();  
   const { user } = useUserContext();
 
@@ -33,7 +33,7 @@ function SignUp() {
   }
 
   function _onSubmitRespond ({ username }: SignUpDto)  {
-   return async ({ accessToken }: LoginResDto) => {
+   return ({ accessToken }: LoginResDto) => {
      if (!accessToken) {
        return;
      }
@@ -41,8 +41,12 @@ function SignUp() {
      localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
      localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
 
-     user.value = new User({ username, permissions: await firstValueFrom(getPermissionList()) });
-     navigate("/");
+     forkJoin([getPermissionList(), getRoleList()]).subscribe(
+      ([permissions, roles]) => {
+        user.value = new User({ permissions, roles, username })
+        navigate("/");
+      }
+    );
    };
   }
 

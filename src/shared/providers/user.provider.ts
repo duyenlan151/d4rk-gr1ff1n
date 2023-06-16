@@ -9,21 +9,23 @@ import useHttpProvider from "./http.provider";
 
 interface IUser {
   username?: string;
-  email?: string;
   permissions?: string[];
+  roles?: string[]
 }
 
 interface IUserProvider {
   getPermissionList(): Observable<AppPermission[]>;
+  getRoleList(): Observable<string[]>;
 }
 
 export class User extends Record<IUser>({
   username: undefined,
   permissions: undefined,
+  roles: undefined,
 }) {}
 
 type UserContextType = {
-  user: Signal<User | undefined>
+  user: Signal<User | undefined>;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(
@@ -49,5 +51,11 @@ export function useUserProvider(): IUserProvider {
     return get<AppPermission[]>(url).pipe(map(({ data }) => data));
   }
 
-  return { getPermissionList };
+  function getRoleList(): Observable<string[]> {
+    const url = `${environment.remoteServiceURL}/role/current-user`;
+
+    return get<string[]>(url).pipe(map(({ data }) => data));
+  }
+
+  return { getPermissionList, getRoleList };
 }

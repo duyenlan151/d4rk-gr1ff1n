@@ -1,7 +1,7 @@
 import "./login.component.scss";
 
-import { Observable, catchError, firstValueFrom, of } from "rxjs";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider.ts";
+import { Observable, catchError, forkJoin, of } from "rxjs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FormEvent, useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum.ts";
@@ -21,7 +21,7 @@ function Login() {
   
   const [searchParams] = useSearchParams();
   
-  const { getPermissionList } = useUserProvider();
+  const { getPermissionList, getRoleList } = useUserProvider();
   const { user } = useUserContext();
   const { login } = useAuthProvider();
 
@@ -54,7 +54,7 @@ function Login() {
   }
 
   function _onSubmitRespond({ username }: LoginDto): (LoginResDto: LoginResDto) => void {
-    return async ({ accessToken }: LoginResDto): Promise<void> => {
+    return ({ accessToken }: LoginResDto): void => {
       if (!accessToken) {
         return;
       }
@@ -62,8 +62,12 @@ function Login() {
       localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
       localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
 
-      user.value = new User({ username: username, permissions: await firstValueFrom(getPermissionList())  });
-      navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
+      forkJoin([getPermissionList(), getRoleList()]).subscribe(
+        ([permissions, roles]) => {
+          user.value = new User({ permissions, roles, username });
+          navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
+        }
+      );
     };
   }
 

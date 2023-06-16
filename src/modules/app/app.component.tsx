@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 import Header from "../../shared/layout/header/header.component";
 import Footer from "../../shared/layout/footer/footer.component";
+import { forkJoin } from "rxjs";
 
 function App() {
   const pattern = "/";
@@ -17,14 +18,17 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const { getPermissionList } = useUserProvider();
+  const { getPermissionList, getRoleList } = useUserProvider();
   const { user } = useUserContext();
 
   useEffect(() => {
     if (location.state?._isRedirect) {
-      getPermissionList().subscribe(
-        (permissions) =>
-          (user.value = user.value?.set("permissions", permissions))
+      forkJoin([getPermissionList(), getRoleList()]).subscribe(
+        ([permissions, roles]) => {
+          user.value = user.value?.withMutations((_user) =>
+            _user.set("permissions", permissions).set("roles", roles)
+          );
+        }
       );
     }
 

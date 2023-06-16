@@ -3,26 +3,27 @@ import "./shared/styles/_global.scss";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { User, UserContext, useUserProvider } from "./shared/providers/user.provider";
-import { firstValueFrom } from "rxjs"
 import { Constants } from "./shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
+import { forkJoin } from "rxjs"
 import { routes } from "./root.routing";
 
 const router = createBrowserRouter(routes);
 
 function Root() {
-  const { getPermissionList } = useUserProvider();
+  const { getPermissionList, getRoleList } = useUserProvider();
   const user = useSignal<User | undefined>(undefined);
 
-  async function loadUser() {
+  function loadUser(): void {
     const accessToken = localStorage.getItem(Constants.LOCAL_STORAGE_TOKEN);
 
     if (accessToken && !user.value) {
-      user.value = new User({
-        username: localStorage.getItem(Constants.LOCAL_STORAGE_USERNAME) as string,
-        permissions: await firstValueFrom(getPermissionList()),
-      });
+      forkJoin([getPermissionList(), getRoleList()]).subscribe(
+        ([permissions, roles]) => {
+          user.value = new User({ permissions, roles, username: localStorage.getItem(Constants.LOCAL_STORAGE_USERNAME) as string });
+        }
+      );
     }
   }
 

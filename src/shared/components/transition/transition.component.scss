@@ -1,0 +1,23 @@
+.transition-wrapper {
+  .transition-enter {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+
+  .transition-enter-active {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 300ms, opacity 300ms;
+  }
+
+  .transition-exit {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .transition-exit-active {
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 300ms, opacity 300ms;
+  }
+}

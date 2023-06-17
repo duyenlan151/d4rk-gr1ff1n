@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum";
 import { List } from "immutable";
 import { Chip } from "@mui/material";
+import { useTransitionContext } from "../../../shared/providers/transition.provider";
 
 const columns: GridColDef[] = [
   { 
@@ -65,15 +66,17 @@ function dateTimeToFormat(format?: string) {
 }
 
 function UserManager() {
-  const { getAllUser } = useUserProvider();
   const userList = useSignal<GenericUser[]>([]);
 
-  useEffect(() => {
-    _populateUJserList();
-  }, [userList.value]);
+  const { getAllUser } = useUserProvider();
+  const { entered } = useTransitionContext();
 
-  function _populateUJserList() {
-    if (userList.value.length) {
+  useEffect(() => {
+    _populateUserList();
+  }, [entered.value]);
+
+  function _populateUserList() {
+    if (userList.value.length || !entered.value) {
       return;
     }
 
@@ -91,12 +94,7 @@ function UserManager() {
       <div className="w-full pt-2 grid grid-cols-1 grid-rows-min gap-2">
         <div>
         </div>
-        <DataGrid
-          checkboxSelection
-          disableRowSelectionOnClick
-          rows={userList.value}
-          columns={columns}
-        />
+        <DataGrid checkboxSelection disableRowSelectionOnClick rows={userList.value} columns={columns}/>
       </div>
     </div>
   );

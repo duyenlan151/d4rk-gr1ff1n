@@ -3,26 +3,4 @@
     margin-top: 5px;
     height: calc(100vh - 61px);
   }
-
-  .fade-enter {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  
-  .fade-enter-active {
-    transform: translateX(0);
-    opacity: 1;
-    transition: transform 300ms, opacity 300ms;
-  }
-  
-  .fade-exit {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  
-  .fade-exit-active {
-    transform: translateX(100%);
-    opacity: 0;
-    transition: transform 300ms, opacity 300ms;
-  }
 }

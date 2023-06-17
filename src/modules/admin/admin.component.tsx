@@ -2,7 +2,6 @@
 import "./admin.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { useEffect } from "react";
 
@@ -10,6 +9,7 @@ import { useEffect } from "react";
 import Header from "../../shared/layout/header/admin-header.component";
 import BreadcrumbsContainer from "../../shared/components/breadcrumbs/breadcrumbs.component";
 import SideNav from "../../shared/components/side-nav/side-nav.component";
+import Transition from "../../shared/components/transition/transition.component";
 
 function Admin() {
   const pattern = "/admin";
@@ -24,14 +24,8 @@ function Admin() {
   }, [location]);
 
   return (
-    <div
-      id="content-wrapper"
-      className="admin-wrapper bg-[#F1F1F1] min-h-screen"
-    >
-      <div
-        id="header-container"
-        className="w-full shadow-md z-10 shadow-slate-500/30"
-      >
+    <div id="content-wrapper" className="admin-wrapper bg-[#F1F1F1] min-h-screen">
+      <div id="header-container" className="w-full shadow-md z-10 shadow-slate-500/30">
         <Header />
       </div>
       <OverlayScrollbarsComponent defer id="content">
@@ -46,11 +40,9 @@ function Admin() {
                   <BreadcrumbsContainer />
                 </div>
                 <div className="container bg-white p-3.5 h-full shadow-md shadow-grey-500 rounded-md">
-                  <TransitionGroup>
-                    <CSSTransition key={location.key} classNames="fade" timeout={300} mountOnEnter unmountOnExit>
-                      <Outlet />
-                    </CSSTransition>
-                  </TransitionGroup>
+                  <Transition>
+                    <Outlet />
+                  </Transition>
                 </div>
               </div>
             </div>

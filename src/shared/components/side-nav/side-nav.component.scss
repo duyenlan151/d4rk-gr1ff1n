@@ -1,0 +1,12 @@
+.side-nav-container {
+  .nav-item {
+    &.active {
+      pointer-events: none;
+
+      .item-content {
+        background-color: rgba(7, 123, 7, 0.83);
+        color: white;
+      }
+    }
+  }
+}

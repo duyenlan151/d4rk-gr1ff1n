@@ -3,6 +3,7 @@ export enum Constants {
   LOCAL_STORAGE_TOKEN = "accessToken",
   LOCAL_STORAGE_USERNAME = "currentUser",
   ROUTER_SNAPSHOT_PARAM_REDIRECT = "redirectPath",
+  DATE_TIME_FORMAT_FULL = "yyyy-MM-dd HH:mm"
 }
 
 export enum AppPermission {

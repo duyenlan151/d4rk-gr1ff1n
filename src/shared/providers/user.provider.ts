@@ -1,21 +1,59 @@
 import { createContext, useContext } from "react";
 import { Observable, map } from "rxjs";
 import { AppPermission } from "../constants.enum";
+import { List, Record } from "immutable";
 import { environment } from "../environments/environment";
-import { Record } from "immutable";
 import { Signal } from "@preact/signals-react";
+import { DateTime } from "luxon";
 
 import useHttpProvider from "./http.provider";
+
+interface IGenericUser {
+  id: string;
+  createTime: string;
+  updateTime: string;
+  username: string;
+  email: string;
+  roles: IGenericRole[];
+}
+
+interface IGenericRole {
+  id: string;
+  name: string;
+  enabled: boolean;
+}
+
+export class GenericRole extends Record<Partial<IGenericRole>>({
+  id: undefined,
+  name: undefined,
+  enabled: undefined,
+}) {}
+
+interface IGenericUserRecord extends Omit<IGenericUser, "roles" | "createTime" | "updateTime"> {
+  createTime: DateTime,
+  updateTime: DateTime,
+  roles: List<GenericRole>;
+}
+
+export class GenericUser extends Record<Partial<IGenericUserRecord>>({
+  id: undefined,
+  createTime: undefined,
+  updateTime: undefined,
+  username: undefined,
+  email: undefined,
+  roles: List(),
+}) {}
 
 interface IUser {
   username?: string;
   permissions?: string[];
-  roles?: string[]
+  roles?: string[];
 }
 
 interface IUserProvider {
   getPermissionList(): Observable<AppPermission[]>;
   getRoleList(): Observable<string[]>;
+  getAllUser(): Observable<GenericUser[]>;
 }
 
 export class User extends Record<IUser>({
@@ -44,6 +82,7 @@ export function useUserContext() {
 
 export function useUserProvider(): IUserProvider {
   const { get } = useHttpProvider();
+  const _enpoint = `${environment.remoteServiceURL}/user`;
 
   function getPermissionList(): Observable<AppPermission[]> {
     const url = `${environment.remoteServiceURL}/permission/current-user`;
@@ -57,5 +96,20 @@ export function useUserProvider(): IUserProvider {
     return get<string[]>(url).pipe(map(({ data }) => data));
   }
 
-  return { getPermissionList, getRoleList };
+  function getAllUser(): Observable<GenericUser[]> {
+    const millisToDateTime = (milis: string) => DateTime.fromMillis(Number(milis));
+    const userMapper = ({ createTime, updateTime, roles, ...others }: IGenericUser) =>
+      new GenericUser({
+        ...others,
+        createTime: millisToDateTime(createTime),
+        updateTime: millisToDateTime(updateTime),
+        roles: List(roles.map((role) => new GenericRole(role))),
+      });
+
+    return get<IGenericUser[]>(_enpoint).pipe(
+      map(({ data }) => data.map(userMapper))
+    );
+  }
+
+  return { getPermissionList, getRoleList, getAllUser };
 }

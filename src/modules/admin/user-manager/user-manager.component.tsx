@@ -1,12 +1,12 @@
 import { DataGrid, GridColDef, GridRenderCellParams, GridValueFormatterParams } from "@mui/x-data-grid";
 import { GenericRole, GenericUser, useUserProvider } from "../../../shared/providers/user.provider";
+import { useTransitionContext } from "../../../shared/providers/transition.provider";
 import { useSignal } from "@preact/signals-react";
 import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum";
 import { List } from "immutable";
 import { Chip } from "@mui/material";
-import { useTransitionContext } from "../../../shared/providers/transition.provider";
 
 const columns: GridColDef[] = [
   { 

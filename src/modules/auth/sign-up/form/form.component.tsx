@@ -104,14 +104,14 @@ function Form({ onSubmit }: IForm) {
     const passwordValueChanged$ = _validateInputValue(_debounceInput(passwordInput$), [_checkPassword], passwordErrors);
     const passwordRetypeValueChanged$ = _validateInputValue(_debounceInput(passwordRetypeInput$), [_checkPasswordRetype], passwordRetypeErrors);
 
-    _registerStore(formValueChanged$, onFormValueChanged);
-    _registerStore(usernameValueChanged$, _handleValueChange(SignUpControl.USERNAME, isUsernameValid));
-    _registerStore(emailValueChanged$, _handleValueChange(SignUpControl.EMAIL,isEmailValid));
-    _registerStore(passwordValueChanged$, _handleValueChange(SignUpControl.PASSWORD,isPasswordValid));
-    _registerStore(passwordRetypeValueChanged$, _handleValueChange(SignUpControl.PASSWORD_RETYPE, isPasswordRetypeValid));
+    _register(formValueChanged$, onFormValueChanged);
+    _register(usernameValueChanged$, _handleValueChange(SignUpControl.USERNAME, isUsernameValid));
+    _register(emailValueChanged$, _handleValueChange(SignUpControl.EMAIL,isEmailValid));
+    _register(passwordValueChanged$, _handleValueChange(SignUpControl.PASSWORD,isPasswordValid));
+    _register(passwordRetypeValueChanged$, _handleValueChange(SignUpControl.PASSWORD_RETYPE, isPasswordRetypeValid));
 
-    function _registerStore<T>(store$: Observable<T>, processor: (data: T) => void) {
-      store$.pipe(takeUntil(onDestroy$)).subscribe(processor);
+    function _register<T>(observable$: Observable<T>, subscriber: (data: T) => void) {
+      observable$.pipe(takeUntil(onDestroy$)).subscribe(subscriber);
     }
 
     return () => onDestroy$.next();

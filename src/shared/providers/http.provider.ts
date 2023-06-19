@@ -1,8 +1,11 @@
-import { Observable, catchError, from, map, throwError } from "rxjs";
+import { Observable, Subject, filter, from, map, takeUntil, tap } from "rxjs";
 import axios, { AxiosResponse } from "axios";
+
 import JWTInterceptor from "../interceptors/jwt.interceptor";
+import ErrorInterceptor from "../interceptors/error.interceptor";
 
 axios.interceptors.request.use(JWTInterceptor);
+axios.interceptors.response.use(undefined, ErrorInterceptor);
 
 export interface IResponse<T> {
   statusCode: number;
@@ -55,10 +58,17 @@ function useHttpProvider(): IHttpProvider {
    * @returns 
    */
   function _fromRequestPromise<T>(request: Promise<AxiosResponse<IResponse<T>>>): Observable<IResponse<T>> {
+    const finish$ = new Subject<void>();
+    const onResError = (response: AxiosResponse<IResponse<T>>) => {
+      if (!response) {
+        finish$.next();
+      }
+    }
+
+
     return from(request).pipe(
-      catchError(({ response }: Record<string, any>) =>
-        throwError(() => new Error(response.data.message))
-      ),
+      tap(onResError),
+      takeUntil(finish$),
       map(({ data }: AxiosResponse<IResponse<T>>): IResponse<T> => data)
     );
   }

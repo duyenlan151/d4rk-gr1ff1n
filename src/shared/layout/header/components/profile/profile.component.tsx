@@ -92,7 +92,7 @@ function ProfileMenu() {
           <div className="font-semibold">{user.value?.username}</div>
         </MenuItem>
         <Divider />
-        {user.value?.roles?.includes("Admin") ? (
+        {user.value?.roles?.find(({ name }) => name === "Admin") ? (
           <MenuItem onClick={_handleNavigationClick("/admin/dashboard")}>
             <ListItemIcon>
               <Handyman fontSize="small" />

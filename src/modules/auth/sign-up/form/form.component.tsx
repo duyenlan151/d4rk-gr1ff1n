@@ -7,7 +7,7 @@ import { useToastContext } from "../../../../shared/providers/toast.provider";
 import { List } from "immutable";
 
 import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
-import useAuthProvider, { ISignUpFormDto, SignUpDto, SignUpFormDto } from "../../auth.provider";
+import useAuthProvider, { ISignUpFormDto, SignUpDto, SignUpFormDto } from "../../../../shared/providers/auth.provider";
 
 interface IForm {
   onSubmit: (value: SignUpDto) => void;

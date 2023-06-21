@@ -1,9 +1,9 @@
 import { Record as ImmutableRecord } from "immutable";
 import { Observable, map } from "rxjs";
-import { AppPermission } from "../../shared/constants.enum";
-import { environment } from "../../shared/environments/environment";
+import { AppPermission } from "../constants.enum";
+import { environment } from "../environments/environment";
 
-import useHttpProvider from "../../shared/providers/http.provider";
+import useHttpProvider from "./http.provider";
 
 export interface ILoginDto {
   username: string;

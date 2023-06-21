@@ -1,6 +1,6 @@
 import "./sign-up.component.scss";
 
-import useAuthProvider, { LoginResDto, SignUpDto } from "../auth.provider";
+import useAuthProvider, { LoginResDto, SignUpDto } from "../../../shared/providers/auth.provider";
 import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
 import { Observable, catchError, forkJoin, of } from "rxjs";
 import { useToastContext } from "../../../shared/providers/toast.provider";

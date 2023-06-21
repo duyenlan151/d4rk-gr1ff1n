@@ -18,9 +18,9 @@ interface IHttpGetOptions {
 }
 
 interface IHttpProvider {
-  post<T>(url: string, body: Record<string, any>): Observable<IResponse<T>>;
-  get<T>(url: string, options?: IHttpGetOptions): Observable<IResponse<T>>;
-  patch<T>(url: string, body: Record<string, any>): Observable<IResponse<T>>;
+  post<T = any>(url: string, body: Record<string, any>): Observable<IResponse<T>>;
+  get<T = any>(url: string, options?: IHttpGetOptions): Observable<IResponse<T>>;
+  patch<T = any>(url: string, body: Record<string, any>): Observable<IResponse<T>>;
 }
 
 function useHttpProvider(): IHttpProvider {

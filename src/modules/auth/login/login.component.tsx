@@ -9,7 +9,7 @@ import { Constants } from "../../../shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
 
 
-import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../auth.provider";
+import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../../../shared/providers/auth.provider.ts";
 import backgroundSmall from "../../../assets/images/login-background-small.jpg";
 import background from "../../../assets/images/login-background.jpg";
 import Background from "../../../shared/components/background/background.component.tsx";

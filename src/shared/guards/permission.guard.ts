@@ -4,7 +4,7 @@ import { AppPermission } from "../constants.enum";
 import { redirect } from "react-router-dom";
 import { GuardFn } from "./_guard.model";
 
-import useAuthProvider from "../../modules/auth/auth.provider";
+import useAuthProvider from "../providers/auth.provider";
 
 function permissionGuard(...required: AppPermission[]): GuardFn {
 

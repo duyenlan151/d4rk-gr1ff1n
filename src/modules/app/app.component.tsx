@@ -9,7 +9,6 @@ import { useUserContext, useUserProvider } from "../../shared/providers/user.pro
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { useToastContext } from "../../shared/providers/toast.provider";
 import { useEffect } from "react";
-import { forkJoin } from "rxjs";
 
 import Header from "../../shared/layout/header/header.component";
 import Footer from "../../shared/layout/footer/footer.component";
@@ -20,20 +19,13 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { getPermissionList, getRoleList } = useUserProvider();
+  const { getLoggedInUser } = useUserProvider();
   const { user } = useUserContext();
   const { showToast } = useToastContext();
 
   useEffect(() => {
     if (location.state?._isRedirect && user.value) {
-      forkJoin([getPermissionList(), getRoleList()]).subscribe(
-        ([permissions, roles]) => {
-          user.value = user.value?.withMutations((_user) =>
-            _user.set("permissions", permissions).set("roles", roles)
-          );
-        }
-      );
-
+      getLoggedInUser().subscribe((_user) => (user.value = _user));
       showToast("You do not have permission to access that resource!", { severity: "error", duration: 2000 });
     }
 

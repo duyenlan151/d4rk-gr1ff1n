@@ -6,8 +6,9 @@ import { Dashboard, People, Groups } from "@mui/icons-material";
 import { useEffect, useRef } from "react";
 import { useUserContext } from "../../providers/user.provider";
 import { AppPermission } from "../../constants.enum";
-import { NavLink } from "react-router-dom";
 import { useSignal } from "@preact/signals-react";
+import { NavLink } from "react-router-dom";
+import { Set } from "immutable";
 
 interface INavItem {
   path: string;
@@ -82,18 +83,6 @@ function SideNav() {
   const activeItemTop = useSignal(0);
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const navItems = [];
-
-  for (const navItem of nav) {
-    if (navItem.permissions && !navItem.permissions?.every((permission) => user.value?.permissions?.includes(permission))) {
-      continue;
-    }
-
-    const id = uuidGenerator.next().value as string;
-
-    navItems.push(<NavItem id={id} key={id} {...navItem} activeItem={activeItemId.value as BehaviorSubject<string>} />);
-  }
-
   useEffect(() => {
     const onDestroy$ = new Subject<void>();
 
@@ -103,10 +92,10 @@ function SideNav() {
         const containerEl = containerRef.current ;
         const el = document.querySelector<HTMLElement>(`#${id}`);
 
+        el?.classList.add("active")
+
         const containerTop = containerEl?.getBoundingClientRect().top ?? 0;
         const elTop = el?.getBoundingClientRect().top ?? 0;
-
-        el?.classList.add("active")
         
         activeItemTop.value = elTop - containerTop;
       });
@@ -114,6 +103,29 @@ function SideNav() {
     return () => onDestroy$.next();
   }, [activeItemId.value]);
 
+  if (!user.value) {
+    return <></>;
+  }
+
+  const navItems = [];
+
+  let _permissions = Set<string>();
+
+  for (const { permissions } of user.value.roles) {
+    for (const permission of permissions) {
+      _permissions = _permissions.add(permission);
+    }
+  }
+
+  for (const navItem of nav) {
+    if (navItem.permissions && !navItem.permissions?.every((permission) => _permissions.has(permission))) {
+      continue;
+    }
+
+    const id = uuidGenerator.next().value as string;
+
+    navItems.push(<NavItem id={id} key={id} {...navItem} activeItem={activeItemId.value as BehaviorSubject<string>} />);
+  }
 
   return (
     <div ref={containerRef} className="side-nav-container w-52 py-2 bg-white rounded-lg shadow-md shadow-grey-500 mt-[52px] h-[50vh] grid grid-cols-1 auto-rows-min divide-y relative">

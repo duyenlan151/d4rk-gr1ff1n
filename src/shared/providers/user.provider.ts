@@ -65,7 +65,7 @@ export function useUserProvider(): IUserProvider {
         ...others,
         createTime: millisToDateTime(createTime),
         updateTime: millisToDateTime(updateTime),
-        roles: List(roles),
+        roles: List(roles.map(({ id }) => id)),
       });
 
     return get<IPreviewUserDto[]>(_endpoint).pipe(

@@ -1,12 +1,15 @@
 import { DataGrid, GridCellParams, GridColDef, GridRenderCellParams, GridRowParams, GridValueFormatterParams } from "@mui/x-data-grid";
-import { GenericRole, GenericUser, useUserProvider } from "../../../shared/providers/user.provider";
 import { useTransitionContext } from "../../../shared/providers/transition.provider";
+import { useUserProvider } from "../../../shared/providers/user.provider";
+import { forkJoin, tap } from "rxjs";
+import { generateUUID } from "../../../shared/util.class";
+import { PreviewUser } from "../../../shared/models/user/user.model";
+import { CompactRole } from "../../../shared/models/role/role.model";
 import { useSignal } from "@preact/signals-react";
 import { DateTime } from "luxon";
 import { useEffect } from "react";
 import { Constants } from "../../../shared/constants.enum";
-import { forkJoin, tap } from "rxjs";
-import { List } from "immutable";
+import { List, Map } from "immutable";
 import { Chip } from "@mui/material";
 
 import UserDetailsPopup from "./components/user-details-popup/user-details-popup..component";
@@ -45,11 +48,12 @@ const columns: GridColDef[] = [
   },
 ];
 
-function RoleCell({ value }: GridRenderCellParams<List<GenericRole>>) {
+function RoleCell({ value }: GridRenderCellParams<List<string>>) {
+  const uuidGenerator = generateUUID();
   const roles = [];
 
-  for (const role of value as List<GenericRole>) {
-    roles.push(<Chip key={role.id} label={role.name} className={`opacity-${role.enabled ? "100" : "50"}`} />);
+  for (const role of value as List<string>) {
+    roles.push(<Chip key={uuidGenerator.next().value as string} label={role}  />);
   }
 
   return <div className="flex gap-2">{roles}</div>;
@@ -66,16 +70,17 @@ function dateTimeToFormat(format?: string) {
 }
 
 function UserManager() {
-  const userList = useSignal<GenericUser[]>([]);
-  const selectedUser = useSignal<GenericUser | undefined>(undefined);
+  const userList = useSignal<PreviewUser[]>([]);
+  const selectedUser = useSignal<PreviewUser | undefined>(undefined);
   const isLoading = useSignal<boolean>(false);
+  // const roleMap = useSignal<>
 
   const { getUsers } = useUserProvider();
   const { getRoles } = useRoleProvider();
   const { getPermissions } = usePermissionProvider();
   const { entered } = useTransitionContext();
 
-  function onRowClick(params: GridRowParams<GenericUser>) {
+  function onRowClick(params: GridRowParams<PreviewUser>) {
     selectedUser.value = params.row
   }
 
@@ -89,12 +94,21 @@ function UserManager() {
     }
 
     isLoading.value = true;
+    
     forkJoin([getUsers(), getRoles({ compact: true, permissions: true }), getPermissions({ full: true })])
       .pipe(tap(() => (isLoading.value = false)))
       .subscribe(([users, roles]) => {
-        userList.value = users;
+        const _roleMap = Map<string, CompactRole>().withMutations((map) => {
+          for (const role of roles) {
+            map.set(role.id, role);
+          }
+        });
 
-        console.log(roles);
+        userList.value = users.map((user) =>
+          user.update("roles", (_roles) =>
+            _roles.map((role) => _roleMap.get(role)?.name ?? role)
+          )
+        );
       });
   }
 

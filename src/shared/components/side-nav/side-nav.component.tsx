@@ -6,6 +6,7 @@ import { Dashboard, People, Groups } from "@mui/icons-material";
 import { useEffect, useRef } from "react";
 import { useUserContext } from "../../providers/user.provider";
 import { AppPermission } from "../../constants.enum";
+import { generateUUID } from "../../util.class";
 import { useSignal } from "@preact/signals-react";
 import { NavLink } from "react-router-dom";
 import { Set } from "immutable";
@@ -41,18 +42,6 @@ const nav: Partial<INavItem>[] = [
     permissions: [AppPermission.ROLE_READ],
   },
 ];
-
-function* generateUUID() {
-  const pattern = 'x4xx-yxxx-xxxxxxxxxxxx';
-
-  while (true) {
-    yield pattern.replace(/[xy]/g, function(char) {
-      const randomHexDigit = Math.random() * 16 | 0;
-      const hexDigit = char === 'x' ? randomHexDigit : (randomHexDigit & 0x3 | 0x8);
-      return "a" + hexDigit.toString(16);
-    });
-  }
-}
 
 function NavItem(props: Partial<IWatchedNavItem>) {
   const Icon = () => props.icon;

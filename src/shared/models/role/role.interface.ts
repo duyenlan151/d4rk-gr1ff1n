@@ -2,7 +2,7 @@ import { ICompactRoleWithPermissionIdsDto, ILoggedInUserRoleDto } from "./role.d
 import { List } from "immutable";
 
 export interface ICompactRoleWithPermissionIds extends Omit<ICompactRoleWithPermissionIdsDto, "permissions"> {
-  permissions: string[];
+  permissions: List<string>;
 }
 
 export interface ILoggedInUserRole extends Omit<ILoggedInUserRoleDto, "permissions"> {

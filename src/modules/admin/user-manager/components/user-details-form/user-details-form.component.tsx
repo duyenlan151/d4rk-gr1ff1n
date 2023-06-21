@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormGroup, InputLabel, List, OutlinedInput } from "@mui/material";
-import { Signal, useSignal } from "@preact/signals-react";
 import { FormEvent, FormEventHandler, useEffect } from "react";
+import { Signal, useSignal } from "@preact/signals-react";
 import { DetailedUser } from "../../../../../shared/models/user/user.model";
 import { IDetailedUser } from "../../../../../shared/models/user/user.interface";
 

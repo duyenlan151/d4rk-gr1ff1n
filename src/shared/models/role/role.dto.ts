@@ -9,4 +9,6 @@ export interface ILoggedInUserRoleDto extends Pick<IRole, "name"> {
   permissions: Pick<IPermission, "id" | "name">[];
 }
 
+export type IPreviewUserRoleDto = Pick<IRole, "id">;
+
 export type IRoleDto = ICompactRoleWithPermissionIdsDto;

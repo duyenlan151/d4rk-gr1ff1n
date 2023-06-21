@@ -1,8 +1,8 @@
-import { ILoggedInUserRoleDto } from "../role/role.dto";
+import { ILoggedInUserRoleDto, IPreviewUserRoleDto } from "../role/role.dto";
 import { IUser } from "./user.entity";
 
 export interface IPreviewUserDto extends IUser {
-  roles: string[];
+  roles: IPreviewUserRoleDto[];
 }
 
 export interface ILoggedInUserDto extends Pick<IUser, "username"> {

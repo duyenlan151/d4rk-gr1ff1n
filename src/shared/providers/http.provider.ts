@@ -61,11 +61,9 @@ function useHttpProvider(): IHttpProvider {
   function _fromRequestPromise<T>(request: Promise<AxiosResponse<IResponse<T>>>): Observable<IResponse<T>> {
     return new Observable<IResponse<T>>((subscriber) => {
       request
-        .then((value) => {
-          subscriber.next(value.data);
-          subscriber.complete();
-        })
-        .catch((err) => subscriber.error(err));
+        .then((value: AxiosResponse<IResponse<T>>): void => subscriber.next(value.data))
+        .catch((err: Error): void => subscriber.error(err))
+        .finally((): void => subscriber.complete());
     });
   }
 

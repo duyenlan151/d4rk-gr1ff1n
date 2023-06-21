@@ -1,5 +1,5 @@
-import { Observable, Subject, filter, from, map, takeUntil, tap } from "rxjs";
 import axios, { AxiosResponse } from "axios";
+import { Observable } from "rxjs";
 
 import JWTInterceptor from "../interceptors/jwt.interceptor";
 import ErrorInterceptor from "../interceptors/error.interceptor";
@@ -58,19 +58,14 @@ function useHttpProvider(): IHttpProvider {
    * @returns 
    */
   function _fromRequestPromise<T>(request: Promise<AxiosResponse<IResponse<T>>>): Observable<IResponse<T>> {
-    const finish$ = new Subject<void>();
-    const onResError = (response: AxiosResponse<IResponse<T>>) => {
-      if (!response) {
-        finish$.next();
-      }
-    }
-
-
-    return from(request).pipe(
-      tap(onResError),
-      takeUntil(finish$),
-      map(({ data }: AxiosResponse<IResponse<T>>): IResponse<T> => data)
-    );
+    return new Observable<IResponse<T>>((subscriber) => {
+      request
+        .then((value) => {
+          subscriber.next(value.data);
+          subscriber.complete();
+        })
+        .catch((err) => subscriber.error(err));
+    });
   }
 
   return { post, get, patch };

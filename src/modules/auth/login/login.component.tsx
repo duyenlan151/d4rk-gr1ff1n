@@ -3,8 +3,9 @@ import "./login.component.scss";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Observable, catchError, of } from "rxjs";
 import { FormEvent, useEffect } from "react";
-import { useToastContext } from "../../../shared/providers/toast.provider.ts";
 import { useUserProvider } from "../../../shared/providers/user.provider.ts";
+import { useToastContext } from "../../../shared/contexts/toast.context.ts";
+import { useUserContext } from "../../../shared/contexts/user.context.ts";
 import { Constants } from "../../../shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
 
@@ -16,7 +17,6 @@ import Background from "../../../shared/components/background/background.compone
 import Loader from "../../../shared/components/loader/loader.component";
 import Form from "./form/form.component";
 import Logo from "../../../shared/components/logo/logo.component.tsx";
-import { useUserContext } from "../../../shared/contexts/user.context.ts";
 
 function Login() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ function Login() {
   
   const { getLoggedInUser } = useUserProvider();
   const { user } = useUserContext();
-  const { showToast } = useToastContext()
+  const { showToast } = useToastContext();
   const { login } = useAuthProvider();
 
   // UI related

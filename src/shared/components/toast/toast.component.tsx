@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { PropsWithChildren, SyntheticEvent, useEffect } from "react";
 import { Alert, AlertColor, Snackbar } from "@mui/material";
-import { ToastContext } from "../../providers/toast.provider";
+import { ToastContext } from "../../contexts/toast.context";
 import { Record, Stack } from "immutable";
 import { useSignal } from "@preact/signals-react";
 

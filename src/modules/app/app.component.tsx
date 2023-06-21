@@ -6,8 +6,8 @@ import "./app.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
-import { useToastContext } from "../../shared/providers/toast.provider";
 import { useUserProvider } from "../../shared/providers/user.provider";
+import { useToastContext } from "../../shared/contexts/toast.context";
 import { useUserContext } from "../../shared/contexts/user.context";
 import { useEffect } from "react";
 

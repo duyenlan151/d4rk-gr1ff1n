@@ -3,7 +3,7 @@ import "./sign-up.component.scss";
 import useAuthProvider, { LoginResDto, SignUpDto } from "../../../shared/providers/auth.provider";
 import { Observable, catchError, of } from "rxjs";
 import { useUserProvider } from "../../../shared/providers/user.provider";
-import { useToastContext } from "../../../shared/providers/toast.provider";
+import { useToastContext } from "../../../shared/contexts/toast.context";
 import { useUserContext } from "../../../shared/contexts/user.context";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";

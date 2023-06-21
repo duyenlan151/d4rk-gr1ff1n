@@ -1,7 +1,7 @@
 import { Tooltip, Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/material";
 import { MouseEvent, MouseEventHandler } from "react";
 import { Settings, Logout, Handyman } from "@mui/icons-material";
-import { useToastContext } from "../../../../providers/toast.provider";
+import { useToastContext } from "../../../../contexts/toast.context";
 import { useUserContext } from "../../../../contexts/user.context";
 import { useNavigate } from "react-router-dom";
 import { useSignal } from "@preact/signals-react";

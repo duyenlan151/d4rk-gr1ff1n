@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useUserContext } from "../../providers/user.provider";
 import { useEffect } from "react";
 import { useSignal } from "@preact/signals-react";
 import { Constants } from "../../constants.enum";
@@ -11,6 +10,7 @@ import ProfileMenu from "./components/profile/profile.component";
 import NotificationButton from "./components/notification/notification.component";
 import GetStartedButton from "./components/get-started-button/get-started.component";
 import LoginButton from "./components/login-button/login-button.component";
+import { useUserContext } from "../../contexts/user.context";
 
 
 function UnAuthorizedActions() {

@@ -1,10 +1,10 @@
 import "./login.component.scss";
 
-import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider.ts";
-import { Observable, catchError, forkJoin, of } from "rxjs";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Observable, catchError, of } from "rxjs";
 import { FormEvent, useEffect } from "react";
 import { useToastContext } from "../../../shared/providers/toast.provider.ts";
+import { useUserProvider } from "../../../shared/providers/user.provider.ts";
 import { Constants } from "../../../shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
 
@@ -16,13 +16,14 @@ import Background from "../../../shared/components/background/background.compone
 import Loader from "../../../shared/components/loader/loader.component";
 import Form from "./form/form.component";
 import Logo from "../../../shared/components/logo/logo.component.tsx";
+import { useUserContext } from "../../../shared/contexts/user.context.ts";
 
 function Login() {
   const navigate = useNavigate();
   
   const [searchParams] = useSearchParams();
   
-  const { getPermissionList, getRoleList } = useUserProvider();
+  const { getLoggedInUser } = useUserProvider();
   const { user } = useUserContext();
   const { showToast } = useToastContext()
   const { login } = useAuthProvider();
@@ -64,14 +65,12 @@ function Login() {
       localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
       localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
 
-      forkJoin([getPermissionList(), getRoleList()]).subscribe(
-        ([permissions, roles]) => {
-          showToast("Logged in successfully.");
-
-          user.value = new User({ permissions, roles, username });
-          navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
-        }
-      );
+      getLoggedInUser().subscribe((_user) => {
+        showToast("Logged in successfully.");
+        
+        user.value = _user
+        navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
+      });
     };
   }
 

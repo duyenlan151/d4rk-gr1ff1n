@@ -1,4 +1,4 @@
-import { useUserContext } from "../../../shared/providers/user.provider";
+import { useUserContext } from "../../../shared/contexts/user.context";
 
 function Profile() {
   const { user } = useUserContext();

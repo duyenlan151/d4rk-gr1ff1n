@@ -1,9 +1,10 @@
 import "./sign-up.component.scss";
 
 import useAuthProvider, { LoginResDto, SignUpDto } from "../../../shared/providers/auth.provider";
-import { User, useUserContext, useUserProvider } from "../../../shared/providers/user.provider";
-import { Observable, catchError, forkJoin, of } from "rxjs";
+import { Observable, catchError, of } from "rxjs";
+import { useUserProvider } from "../../../shared/providers/user.provider";
 import { useToastContext } from "../../../shared/providers/toast.provider";
+import { useUserContext } from "../../../shared/contexts/user.context";
 import { useNavigate } from "react-router-dom";
 import { Constants } from "../../../shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
@@ -20,7 +21,7 @@ import Logo from "../../../shared/components/logo/logo.component";
 function SignUp() {
   const navigate = useNavigate();
 
-  const { getPermissionList, getRoleList } = useUserProvider();
+  const { getLoggedInUser } = useUserProvider();
   const { signUp } = useAuthProvider();
   const { showToast } = useToastContext();
   const { user } = useUserContext();
@@ -42,14 +43,13 @@ function SignUp() {
 
      localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
      localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
+     
+     getLoggedInUser().subscribe((_user) => {
+       showToast("Signed up successfully.");
 
-     forkJoin([getPermissionList(), getRoleList()]).subscribe(
-      ([permissions, roles]) => {
-        user.value = new User({ permissions, roles, username })
-        showToast("Signed up successfully.")
-        navigate("/");
-      }
-    );
+       user.value = _user;
+       navigate("/");
+     });
    };
   }
 

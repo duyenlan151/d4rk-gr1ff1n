@@ -5,9 +5,10 @@ import "@fontsource/roboto/700.css";
 import "./app.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
-import { useUserContext, useUserProvider } from "../../shared/providers/user.provider";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { useToastContext } from "../../shared/providers/toast.provider";
+import { useUserProvider } from "../../shared/providers/user.provider";
+import { useUserContext } from "../../shared/contexts/user.context";
 import { useEffect } from "react";
 
 import Header from "../../shared/layout/header/header.component";

@@ -3,8 +3,9 @@ import 'overlayscrollbars/overlayscrollbars.css';
 import "./shared/styles/_global.scss";
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { UserContext, useUserProvider } from "./shared/providers/user.provider";
+import { useUserProvider } from "./shared/providers/user.provider";
 import { LoggedInUser } from './shared/models/user/user.model';
+import { UserContext } from './shared/contexts/user.context';
 import { Constants } from "./shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
 import { useEffect } from "react";

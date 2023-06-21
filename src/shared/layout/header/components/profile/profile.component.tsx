@@ -2,7 +2,7 @@ import { Tooltip, Avatar, Menu, MenuItem, Divider, ListItemIcon } from "@mui/mat
 import { MouseEvent, MouseEventHandler } from "react";
 import { Settings, Logout, Handyman } from "@mui/icons-material";
 import { useToastContext } from "../../../../providers/toast.provider";
-import { useUserContext } from "../../../../providers/user.provider";
+import { useUserContext } from "../../../../contexts/user.context";
 import { useNavigate } from "react-router-dom";
 import { useSignal } from "@preact/signals-react";
 import { Constants } from "../../../../constants.enum";

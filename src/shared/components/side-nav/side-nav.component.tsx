@@ -4,7 +4,7 @@ import "./side-nav.component.scss";
 import { BehaviorSubject, Subject, debounceTime, takeUntil } from "rxjs";
 import { Dashboard, People, Groups } from "@mui/icons-material";
 import { useEffect, useRef } from "react";
-import { useUserContext } from "../../providers/user.provider";
+import { useUserContext } from "../../contexts/user.context";
 import { AppPermission } from "../../constants.enum";
 import { generateUUID } from "../../util.class";
 import { useSignal } from "@preact/signals-react";

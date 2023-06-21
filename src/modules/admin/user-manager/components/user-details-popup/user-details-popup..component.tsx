@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Modal, SxProps, Theme, Tooltip } from "@mui/material";
 import { DetailedUser, PreviewUser } from "../../../../../shared/models/user/user.model";
 import { useUserProvider } from "../../../../../shared/providers/user.provider";
 import { Close, Edit, Delete } from "@mui/icons-material";
 import { Signal, useSignal } from "@preact/signals-react";
 import { useEffect } from "react";
-import { List } from "immutable";
 import { tap } from "rxjs";
 
 import Loader from "../../../../../shared/components/loader/loader.component";
@@ -29,12 +29,7 @@ function UserDetailsPopup({ user }: IUserDetailsPopup) {
   function onChanges() {
     if (user.value) {
       _fetchUser(user.value.id as string).subscribe(
-        (data) =>
-          (userDetails.value = new DetailedUser({
-            ...data,
-            id: user.value?.id,
-            roles: List<string>(data.roles),
-          }))
+        (data) => (userDetails.value = data)
       );
     }
 

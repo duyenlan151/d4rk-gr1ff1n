@@ -21,6 +21,7 @@ function UserDetailsPopup({ user }: IUserDetailsPopup) {
   const isLoading = useSignal<boolean>(false);
   const isEditing = useSignal<boolean>(false);
   const userDetails = useSignal<DetailedUser | undefined>(undefined);
+
   function onClose() {
     userDetails.value = user.value = undefined;
     isEditing.value = false;
@@ -33,7 +34,7 @@ function UserDetailsPopup({ user }: IUserDetailsPopup) {
       );
     }
 
-    return () => {};
+    // return () => {};
   }
 
   function _enableEditMode(): void {
@@ -42,6 +43,7 @@ function UserDetailsPopup({ user }: IUserDetailsPopup) {
 
   function _fetchUser(id: string) {
     isLoading.value = true;
+
     return getUser(id).pipe(tap(() => (isLoading.value = false)));
   }
 

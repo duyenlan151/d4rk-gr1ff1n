@@ -29,7 +29,7 @@ function UserDetailsPopup({ user }: IUserDetailsPopup) {
   function onChanges() {
     if (user.value) {
       _fetchUser(user.value.id as string).subscribe(
-        (data) => (userDetails.value = data)
+        (data) => (userDetails.value = data.set("id", user.value?.id as string))
       );
     }
 

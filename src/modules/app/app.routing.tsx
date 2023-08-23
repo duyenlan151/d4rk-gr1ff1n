@@ -6,7 +6,7 @@ import { lazy } from "react";
 import { routes as commissionRoutes } from "./commission/commission.routing";
 
 // Guards
-import authGuard from "../../shared/guards/auth.guard.ts";
+import authGuard from "@/shared/guards/auth.guard.ts";
 
 // Eager components
 import Landing from "./home/landing.component.tsx";
@@ -20,7 +20,7 @@ export const routes: RouteObject[] = [
     path: "home",
     element: <Landing />,
   },
-  { 
+  {
     path: ":username",
     element: <Profile />
   },

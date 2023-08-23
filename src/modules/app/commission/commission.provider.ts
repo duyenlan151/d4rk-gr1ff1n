@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
 import { Observable, map } from "rxjs";
-import { environment } from "../../../shared/environments/environment";
+import { environment } from "@/shared/environments/environment";
 import { List } from "immutable";
 
-import useHttpProvider from "../../../shared/providers/http.provider";
+import useHttpProvider from "@/shared/providers/http.provider";
 
 interface CommissionContextType {
   commissionList$: Observable<List<Commission>>;

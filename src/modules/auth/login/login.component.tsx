@@ -3,26 +3,26 @@ import "./login.component.scss";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Observable, catchError, of } from "rxjs";
 import { FormEvent, useEffect } from "react";
-import { useUserProvider } from "../../../shared/providers/user.provider.ts";
-import { useToastContext } from "../../../shared/contexts/toast.context.ts";
-import { useUserContext } from "../../../shared/contexts/user.context.ts";
-import { Constants } from "../../../shared/constants.enum.ts";
+import { useUserProvider } from "@/shared/providers/user.provider.ts";
+import { useToastContext } from "@/shared/contexts/toast.context.ts";
+import { useUserContext } from "@/shared/contexts/user.context.ts";
+import { Constants } from "@/shared/constants.enum.ts";
 import { useSignal } from "@preact/signals-react";
 
 
-import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "../../../shared/providers/auth.provider.ts";
-import backgroundSmall from "../../../assets/images/login-background-small.jpg";
-import background from "../../../assets/images/login-background.jpg";
-import Background from "../../../shared/components/background/background.component.tsx";
-import Loader from "../../../shared/components/loader/loader.component";
+import useAuthProvider, { ILoginDto, LoginDto, LoginResDto } from "@/shared/providers/auth.provider.ts";
+import backgroundSmall from "@/assets/images/login-background-small.jpg";
+import background from "@/assets/images/login-background.jpg";
+import Background from "@/shared/components/background/background.component.tsx";
+import Loader from "@/shared/components/loader/loader.component";
 import Form from "./form/form.component";
-import Logo from "../../../shared/components/logo/logo.component.tsx";
+import Logo from "@/shared/components/logo/logo.component.tsx";
 
 function Login() {
   const navigate = useNavigate();
-  
+
   const [searchParams] = useSearchParams();
-  
+
   const { getLoggedInUser } = useUserProvider();
   const { user } = useUserContext();
   const { showToast } = useToastContext();
@@ -67,7 +67,7 @@ function Login() {
 
       getLoggedInUser().subscribe((_user) => {
         showToast("Logged in successfully.");
-        
+
         user.value = _user
         navigate(searchParams.has(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) ? (searchParams.get(Constants.ROUTER_SNAPSHOT_PARAM_REDIRECT) as string) : "/");
       });

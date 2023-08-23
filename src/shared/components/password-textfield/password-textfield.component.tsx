@@ -23,7 +23,7 @@ function PasswordTextField({ id, name, label }: IPasswordTextField) {
   return (
     <>
       <InputLabel htmlFor={id}>{label}</InputLabel>
-      <OutlinedInput 
+      <OutlinedInput
         id={id}
         name={name}
         label={label}

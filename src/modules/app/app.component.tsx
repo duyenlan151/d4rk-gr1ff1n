@@ -6,13 +6,13 @@ import "./app.component.scss";
 
 import { Outlet, useLocation, useMatch, useNavigate } from "react-router-dom";
 import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
-import { useUserProvider } from "../../shared/providers/user.provider";
-import { useToastContext } from "../../shared/contexts/toast.context";
-import { useUserContext } from "../../shared/contexts/user.context";
+import { useUserProvider } from "@/shared/providers/user.provider";
+import { useToastContext } from "@/shared/contexts/toast.context";
+import { useUserContext } from "@/shared/contexts/user.context";
 import { useEffect } from "react";
 
-import Header from "../../shared/layout/header/header.component";
-import Footer from "../../shared/layout/footer/footer.component";
+import Header from "@/shared/layout/header/header.component";
+import Footer from "@/shared/layout/footer/footer.component";
 
 function App() {
   const pattern = "/";

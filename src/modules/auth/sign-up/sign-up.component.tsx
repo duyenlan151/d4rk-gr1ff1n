@@ -1,21 +1,21 @@
 import "./sign-up.component.scss";
 
-import useAuthProvider, { LoginResDto, SignUpDto } from "../../../shared/providers/auth.provider";
+import useAuthProvider, { LoginResDto, SignUpDto } from "@/shared/providers/auth.provider";
 import { Observable, catchError, of } from "rxjs";
-import { useUserProvider } from "../../../shared/providers/user.provider";
-import { useToastContext } from "../../../shared/contexts/toast.context";
-import { useUserContext } from "../../../shared/contexts/user.context";
+import { useUserProvider } from "@/shared/providers/user.provider";
+import { useToastContext } from "@/shared/contexts/toast.context";
+import { useUserContext } from "@/shared/contexts/user.context";
 import { useNavigate } from "react-router-dom";
-import { Constants } from "../../../shared/constants.enum";
+import { Constants } from "@/shared/constants.enum";
 import { useSignal } from "@preact/signals-react";
 import { Link } from "react-router-dom";
 
 import Form from "./form/form.component";
-import background from "../../../assets/images/sign-up-background.jpg";
-import backgroundSmall from "../../../assets/images/sign-up-background-small.jpg";
-import Background from "../../../shared/components/background/background.component";
-import Loader from "../../../shared/components/loader/loader.component";
-import Logo from "../../../shared/components/logo/logo.component";
+import background from "@/assets/images/sign-up-background.jpg";
+import backgroundSmall from "@/assets/images/sign-up-background-small.jpg";
+import Background from "@/shared/components/background/background.component";
+import Loader from "@/shared/components/loader/loader.component";
+import Logo from "@/shared/components/logo/logo.component";
 
 
 function SignUp() {
@@ -43,7 +43,7 @@ function SignUp() {
 
      localStorage.setItem(Constants.LOCAL_STORAGE_TOKEN, accessToken);
      localStorage.setItem(Constants.LOCAL_STORAGE_USERNAME, username as string);
-     
+
      getLoggedInUser().subscribe((_user) => {
        showToast("Signed up successfully.");
 

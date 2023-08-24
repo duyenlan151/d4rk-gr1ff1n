@@ -6,10 +6,10 @@ import { OverlayScrollbarsComponent } from "overlayscrollbars-react";
 import { useEffect } from "react";
 
 // Components
-import Header from "../../shared/layout/header/admin-header.component";
-import BreadcrumbsContainer from "../../shared/components/breadcrumbs/breadcrumbs.component";
-import SideNav from "../../shared/components/side-nav/side-nav.component";
-import Transition from "../../shared/components/transition/transition.component";
+import Header from "@/shared/layout/header/admin-header.component";
+import BreadcrumbsContainer from "@/shared/components/breadcrumbs/breadcrumbs.component";
+import SideNav from "@/shared/components/side-nav/side-nav.component";
+import Transition from "@/shared/components/transition/transition.component";
 
 function Admin() {
   const pattern = "/admin";

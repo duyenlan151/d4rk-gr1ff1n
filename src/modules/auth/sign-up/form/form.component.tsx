@@ -114,6 +114,7 @@ function Form({ onSubmit }: IForm) {
     }
 
     return () => onDestroy$.next();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUsernameValid.value, isEmailValid.value, isPasswordValid.value, isPasswordRetypeValid.value, formValue.value]);
 
   // ==========================================

@@ -2,7 +2,7 @@ import { IPreviewUser, ILoggedInUser, IDetailedUser } from "./user.interface";
 import { List, Record } from "immutable";
 import { DateTime } from "luxon";
 
-const initRoleList = List<any>();
+const initRoleList = List<unknown>();
 
 /**
  * Represents a user from the user list of the User Manager

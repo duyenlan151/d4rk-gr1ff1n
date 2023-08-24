@@ -5,7 +5,7 @@ import { Observable, Subject, takeUntil } from "rxjs";
 function List() {
   const { commissionList$ } = useCommissionContext();
 
-  useEffect((): any => {
+  useEffect(() => {
     const onDestroy$ = new Subject<void>();
 
     _registerStore(commissionList$, console.log);

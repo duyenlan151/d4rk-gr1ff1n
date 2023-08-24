@@ -2,7 +2,7 @@ import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, InputLabel,
 import { FormEventHandler } from "react";
 import { Link } from "react-router-dom";
 
-import PasswordTextField from "../../../../shared/components/password-textfield/password-textfield.component";
+import PasswordTextField from "@/shared/components/password-textfield/password-textfield.component";
 
 interface IFormProps {
   onSubmit: FormEventHandler<HTMLFormElement>

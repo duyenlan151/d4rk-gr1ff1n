@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import { catchError, map, of, tap } from "rxjs";
 import { AppPermission } from "../constants.enum";
 import { redirect } from "react-router-dom";
@@ -24,7 +23,7 @@ function permissionGuard(...required: AppPermission[]): GuardFn {
       .pipe(
         catchError(() => of(undefined)),
         tap(canActivate),
-        map((value) => !!value)
+        map((value: string | number) => !!value)
       );
   };
 }

@@ -1,7 +1,7 @@
 import { isObservable, firstValueFrom } from "rxjs";
 import { GuardFn } from "./_guard.model";
 
-function composedGuard(...guards: GuardFn<void>[]): GuardFn<any> {
+function composedGuard(...guards: GuardFn<void>[]): GuardFn<unknown> {
   return async (): Promise<boolean> => {
     let canActivate = true;
 
